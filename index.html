@@ -41,7 +41,7 @@ h2{font-size:19px;margin:34px 0 0;padding-bottom:8px;border-bottom:2px solid var
 .qt{flex:1;min-width:0}
 .qt p{margin:0 0 8px}
 .qt .ttl{font-weight:700}
-.qt ol{margin:6px 0 10px;padding-left:1.3em}
+.qt ol,.qt ul{margin:6px 0 10px;padding-left:1.3em}
 .qt li{margin:2px 0}
 .tag{display:inline-block;border:1px solid var(--black);border-radius:4px;padding:0 8px;font-size:13px;margin-right:6px}
 .tag.f{background:var(--black);color:var(--cream)}
@@ -144,6 +144,103 @@ while (!f.eof()) {
     }
 }`,n:"Do not write `while(!f.eof())` with a read inside and no check: eof() becomes true only after a read fails, so the last record is often processed twice. Checking the read itself, as above, avoids this."},
  {t:"5. failbit vs badbit vs eofbit",rows:[["Flag","Set when","Test with","Recoverable?"],["eofbit","A read reaches the end of the file.","eof()","Yes. clear() resets it."],["failbit","An operation fails but the stream is intact: wrong format (letters into an int), nothing extracted, or a read past the end.","fail()","Yes. clear(), then discard the bad input."],["badbit","A serious error or loss of stream integrity, such as a read or write failure.","bad()","Usually not. Stop processing."]],n:"fail() is true if failbit or badbit is set. Reading past the end sets eofbit and failbit together. good() is true only when none of the three is set."}
+ ],
+ qunits:["Unit 1: Working with Files","Unit 2: Exception Handling","Unit 3: Templates","Unit 4: Advanced OOP – STL","Additional output-prediction questions"],
+ qb1:[
+ {u:0,t:"File Stream Classes and File Operations",th:"Explain the different file stream classes available in C++, including `ifstream`, `ofstream` and `fstream`. Draw their inheritance hierarchy and explain the role of their base classes. What are the different methods of opening a file? Differentiate between opening a file through a constructor and using the `open()` member function. Why is it important to close a file after completing file operations?",st:"Student Examination Records",i:"A university maintains examination records in a file named `results.txt`. Write a C++ program that:",r:["Accepts the roll number, student name and marks in three subjects for n students.","Calculates the total and average marks of each student.","Stores all student records in `results.txt` using `ofstream`.","Closes the file and reopens it using `ifstream`.","Displays the details of students whose average marks are above 80.","Displays the total number of students stored in the file."]},
+ {u:0,t:"File Opening Modes",th:"Explain the different file opening modes supported by C++, including `ios::in`, `ios::out`, `ios::app`, `ios::ate`, `ios::trunc` and `ios::binary`. How can multiple opening modes be combined? Differentiate between `ios::app` and `ios::ate` with suitable examples. Explain what happens when an existing file is opened using `ios::out`.",st:"Bank Transaction History",i:"A bank maintains a transaction history in `transactions.txt`. Write a menu-driven C++ program that:",r:["Creates a new transaction file by removing previously stored data.","Adds new transaction details (account number, transaction type and amount) without deleting existing records.","Opens the file in reading mode and displays all transactions.","Calculates and displays the total deposited and withdrawn amounts.","Allows the user to add multiple transactions during execution.","Mention the appropriate file opening mode for every operation."]},
+ {u:0,t:"File Pointers and Random Access",th:"What are file pointers in C++? Explain the difference between get and put pointers. Describe the working of `seekg()`, `seekp()`, `tellg()` and `tellp()` with suitable examples. Explain the significance of `ios::beg`, `ios::cur` and `ios::end`. How does random access differ from sequential file access?",st:"Library Book Database",i:"A library stores book records in a binary file `books.dat`. Each record contains a book ID, title and price. Write a C++ program that:",r:["Stores multiple book records in the binary file using `write()`.","Uses `tellg()` to calculate the total number of records.","Retrieves a particular book record using its position without reading all previous records.","Updates the price of a given book directly using `seekp()`.","Displays the updated record using `seekg()`.","Use `ios::in | ios::out | ios::binary` wherever appropriate."]},
+ {u:0,t:"Error Handling During File Operations",th:"Explain the different stream error states in C++. Discuss the purpose of `is_open()`, `good()`, `fail()`, `bad()`, `eof()` and `clear()`. Differentiate between `failbit`, `badbit` and `eofbit`. Under what circumstances does a stream enter an error state, and how can it be recovered?",st:"Inventory Data Validation",i:"A warehouse maintains product information in `inventory.txt`, containing product ID, product name and quantity. Some records may contain invalid quantities. Write a C++ program that:",r:["Checks whether the file has opened successfully before processing.","Reads product records one by one.","Detects invalid or non-numeric quantities using `fail()`.","Uses `clear()` to reset the stream error state.","Skips the invalid record and continues processing subsequent records.","Displays the number of valid and invalid records.","Calculates the total quantity of all valid products."]},
+ {u:0,t:"Command-Line Arguments",th:"What are command-line arguments in C++? Explain the purpose of `argc` and `argv[]` in the `main()` function. How are arguments passed to a program during execution? Explain how a program can validate the number and type of arguments supplied by the user. What should happen when incorrect arguments are provided?",st:"File Comparison Utility",i:"Develop a command-line utility named `compare` that executes as `compare file1.txt file2.txt`. The program should:",r:["Verify that exactly two filenames have been supplied.","Display an appropriate usage message if the arguments are incorrect.","Open both files and report an error if either file does not exist.","Compare both files character by character.","Identify whether the files are identical.","If they differ, display the position of the first mismatching character.","Display the total number of characters in each file."]},
+ {u:1,t:"Exception Handling and Multiple Catch Blocks",th:"What is an exception in C++? Explain the mechanism of exception handling using `try`, `throw` and `catch`. Why is exception handling preferred over traditional error-handling techniques? Explain how multiple catch blocks are used to handle different exception types. What is the purpose of the catch-all handler `catch(...)`? Why should it generally be placed after specific catch blocks?",st:"Online Shopping Cart",i:"An online shopping platform allows customers to purchase products. Write a C++ program that processes five purchase requests. Create a function `purchase(int quantity, double price)` that throws:",g:[{r:["An integer exception if the quantity is zero or negative.","A string exception if the quantity exceeds 50.","A double exception if the total purchase amount exceeds the customer’s available balance."]},{i:"In `main()`:",r:["Process five different purchase requests.","Handle each exception type using separate catch blocks.","Include a catch-all handler.","Display the final remaining balance.","Demonstrate that the program continues execution after an exception."]}]},
+ {u:1,t:"Standard Exceptions, Rethrowing and Custom Exceptions",th:"Explain exception rethrowing in C++. What is stack unwinding? Describe the hierarchy of standard exception classes, including `exception`, `logic_error`, `runtime_error`, `out_of_range`, `invalid_argument` and `bad_alloc`. How can a user-defined exception class be created by inheriting from `std::exception`? Explain the purpose of overriding the `what()` function.",st:"University Fee Management System",i:"A university maintains student fee balances in a vector. Write a C++ program that:",r:["Defines a custom exception class `InsufficientBalance`, derived from `std::exception`.","Overrides `what()` to return an appropriate error message.","Implements a function `payFee(int studentIndex, double amount)`.","Uses `vector::at()` to detect invalid student indices.","Throws `InsufficientBalance` if the available balance is insufficient.","Catches exceptions inside `payFee()`, displays `Payment Failed – Transaction Rolled Back` and rethrows them.","Handles the exceptions in `main()` using `catch(const exception& e)`.","Displays the updated balances after all transactions."]},
+ {u:2,t:"Function Templates",th:"What is a function template in C++? Explain its syntax and working with a suitable example. Differentiate between function templates and function overloading. Explain function templates with multiple type parameters. What are non-type template parameters? Explain their syntax and use with examples.",st:"Mathematical Utility Library",i:"Develop a generic mathematical utility library using function templates. Write programs to:",r:["Implement a function template `maximum()` that finds the largest element in an array of integers, floating-point numbers and characters.","Implement a function template `swapValues()` that exchanges two values of different supported data types.","Create a function template `display()` that accepts two parameters of different data types.","Implement a function template that calculates the sum of an array using a non-type template parameter to specify its size.","Create a function template `applyTax<percentage>()` that calculates the final price using a fixed tax percentage specified at compile time.","Demonstrate each function using suitable test cases."]},
+ {u:2,t:"Class Templates",th:"What is a class template? Explain its syntax and working with an appropriate example. How can a class template accept multiple data types? Explain non-type template parameters and default template arguments. How are member functions of class templates defined outside the class definition? Differentiate between a normal class and a class template.",st:"Generic Data Structure Library",i:"Develop a generic data structure library using class templates.",g:[{h:"Part A – Generic Stack",i:"Create a class template `Stack<T, int SIZE = 10>` and implement:",r:["`push()` – inserts an element into the stack.","`pop()` – removes the top element.","`top()` – returns the top element.","`display()` – displays all stack elements."]},{i:"The program should:",r:["Throw an exception when the stack overflows.","Throw an exception when the stack underflows.","Demonstrate `Stack<int>`, `Stack<string>` and `Stack<double, 5>`."]},{h:"Part B – Generic Pair",i:"Create a class template `Pair<T1, T2>` that stores two values of different data types. Implement a constructor and a `display()` function. Demonstrate it using a product ID and price, and a student name and roll number."}]},
+ {u:3,t:"Standard Template Library and Containers",th:"Give an overview of the Standard Template Library (STL) in C++. Explain its three major components: containers, iterators and algorithms. Classify STL containers into sequence and associative containers. Explain the working of `vector`, `list`, `set`, `multiset`, `map` and `multimap`. Differentiate between:",l:["Vector and List.","Set and Multiset.","Map and Multimap."],th2:"Explain the role of iterators and commonly used container functions such as `insert()`, `erase()`, `find()`, `count()`, `begin()` and `end()`.",st:"E-Commerce Product Management System",i:"An e-commerce platform maintains product information using STL containers. Write a C++ program that:",g:[{h:"Part A – Vector",r:["Stores product prices in a vector.","Sorts the prices in ascending order using the STL `sort()` algorithm.","Displays the highest and lowest prices."]},{h:"Part B – List",r:["Maintains a list of customer orders.","Adds urgent orders at the beginning and normal orders at the end.","Removes cancelled orders."]},{h:"Part C – Set and Multiset",r:["Stores unique product categories using `set`.","Stores customer ratings using `multiset`.","Uses `count()` to calculate how many customers gave a particular rating."]},{h:"Part D – Map and Multimap",r:["Uses a `map` to associate product IDs with product names.","Uses a `multimap` to associate category names with multiple product names.","Uses `find()` to search for a product.","Uses `equal_range()` to display all products belonging to a particular category."]}]},
+ {u:4,t:"File Handling Output",n:"Predict the output and explain the file contents after execution.",c:`#include<iostream>
+#include<fstream>
+using namespace std;
+int main(){
+    ofstream f("data.txt");
+    f<<"ABC";
+    f.close();
+    fstream g("data.txt",ios::in|ios::out);
+    g.seekp(1,ios::beg);
+    g<<"XY";
+    g.close();
+    ifstream h("data.txt");
+    string s;
+    h>>s;
+    cout<<s;
+}`},
+ {u:4,t:"Exception Handling Output",c:`#include<iostream>
+using namespace std;
+void test(int x){
+    try{
+        if(x==0)
+            throw 0;
+        if(x<0)
+            throw "Negative";
+        cout<<"Valid ";
+    }
+    catch(int){
+        cout<<"Zero ";
+        throw;
+    }
+    catch(const char* s){
+        cout<<s<<" ";
+    }
+}
+int main(){
+    for(int x:{5,0,-2}){
+        try{
+            test(x);
+        }
+        catch(...){
+            cout<<"Main Catch ";
+        }
+    }
+}`},
+ {u:4,t:"Template Output",c:`#include<iostream>
+using namespace std;
+template<class T>
+void show(T x){
+    cout<<"Template ";
+}
+void show(int x){
+    cout<<"Integer ";
+}
+int main(){
+    show(10);
+    show(5.5);
+    show('A');
+}`},
+ {u:4,t:"STL Output",c:`#include<iostream>
+#include<map>
+using namespace std;
+int main(){
+    multimap<int,string> m;
+    m.insert({1,"A"});
+    m.insert({2,"B"});
+    m.insert({1,"C"});
+    m.insert({3,"D"});
+    auto range=m.equal_range(1);
+    for(auto it=range.first;it!=range.second;it++)
+        cout<<it->second<<" ";
+}`},
+ {u:4,t:"STL Container Comparison",c:`#include<iostream>
+#include<set>
+#include<vector>
+using namespace std;
+int main(){
+    vector<int> v={5,2,5,1,2};
+    set<int> s(v.begin(),v.end());
+    multiset<int> ms(v.begin(),v.end());
+    cout<<v.size()<<" ";
+    cout<<s.size()<<" ";
+    cout<<ms.size()<<" ";
+    cout<<ms.count(5);
+}`}
  ],
  osections:["Previous-year questions","Additional predicted questions"],
  output:[
@@ -609,10 +706,10 @@ int main() {
  ]
 }];
 
-const TABS = {code:"Code",theory:"Theory",output:"Output",num:"Numericals",notes:"Notes"};
+const TABS = {code:"Code",theory:"Theory",output:"Output",num:"Numericals",notes:"Notes",qb1:"Question Bank 1"};
 let cur = 0, kind = null;
 function buildSeg(){
-  const t = BANK[cur].tabs || ["code","theory","output","notes"];
+  const t = BANK[cur].tabs || ["code","theory","output","notes","qb1"];
   if(!t.includes(kind)) kind = t[0];
   $("seg").innerHTML = t.map(k=>`<button data-k="${k}" aria-pressed="${k===kind}">${TABS[k]}</button>`).join("");
 }
@@ -621,19 +718,30 @@ const fmt = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c
 
 function buildNav(){
   $("nav").innerHTML = BANK.map((s,i)=>
-    `<button data-i="${i}" aria-current="${i===cur}">${s.name}<span>${(s.code||[]).length + s.theory.length + (s.output||[]).length + (s.num||[]).length}</span></button>`).join("");
+    `<button data-i="${i}" aria-current="${i===cur}">${s.name}<span>${(s.code||[]).length + s.theory.length + (s.output||[]).length + (s.num||[]).length + (s.qb1||[]).length}</span></button>`).join("");
 }
 function row(n, body){ return `<article class="q"><div class="qh"><div class="n">${n}.</div><div class="qt">${body}</div></div></article>`; }
 function render(){
   const s = BANK[cur];
   $("title").textContent = s.name;
-  $("sub").textContent = kind==="notes" ? s.notes.length + " quick-reference notes on file handling" : (s[kind]||[]).length + " " + ({code:"coding",theory:"theory",output:"output-prediction",num:"numerical"}[kind]) + " questions";
+  $("sub").textContent = kind==="qb1" ? "10 long-answer questions (theory + scenario) and 5 output-prediction questions" : kind==="notes" ? s.notes.length + " quick-reference notes on file handling" : (s[kind]||[]).length + " " + ({code:"coding",theory:"theory",output:"output-prediction",num:"numerical"}[kind]) + " questions";
   let h = "", last = -1;
   if(kind==="code"){
     s.code.forEach((x,i)=>{
       if(x.s!==last){ last=x.s; h += `<h2>${s.sections[x.s]}</h2>`; }
       h += row(i+1, `<p class="ttl">${fmt(x.t)}</p><p><span class="tag">${x.m} marks</span></p>` +
         (x.i?`<p>${fmt(x.i)}</p>`:"") + `<ol>${x.r.map(r=>`<li>${fmt(r)}</li>`).join("")}</ol>`);
+    });
+  } else if(kind==="qb1"){
+    s.qb1.forEach((x,i)=>{
+      if(x.u!==last){ last=x.u; h += `<h2>${s.qunits[x.u]}</h2>`; }
+      let b = `<p class="ttl">${fmt(x.t)}</p>`;
+      if(x.c){ b += (x.n?`<p>${fmt(x.n)}</p>`:"") + `<pre>${fmt(x.c)}</pre>`; }
+      else {
+        b += `<p><strong>Theory.</strong> ${fmt(x.th)}</p>` + (x.l?`<ol>${x.l.map(r=>`<li>${fmt(r)}</li>`).join("")}</ol>`:"") + (x.th2?`<p>${fmt(x.th2)}</p>`:"") + `<p><strong>Scenario: ${fmt(x.st)}</strong></p>` + (x.i?`<p>${fmt(x.i)}</p>`:"");
+        (x.g||[{r:x.r}]).forEach(g=>{ b += (g.h?`<p><strong>${fmt(g.h)}</strong></p>`:"") + (g.i?`<p>${fmt(g.i)}</p>`:"") + (g.r?`<ul>${g.r.map(r=>`<li>${fmt(r)}</li>`).join("")}</ul>`:""); });
+      }
+      h += row(i+1, b);
     });
   } else if(kind==="notes"){
     s.notes.forEach(x=>{
