@@ -1,252 +1,674 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Question Bank</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Question Bank</title>
 <style>
-:root{--c:#FFFDF2;--k:#000;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}html,body{height:100%;margin:0}
-body{background:var(--c);color:var(--k);font:15px/1.6 Georgia,'Times New Roman',serif;display:flex}
-aside{width:240px;background:var(--k);color:var(--c);padding:26px 16px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;overflow:hidden;white-space:nowrap;transition:width .28s ease,padding .28s ease}body.shut aside{width:0;padding-left:0;padding-right:0}
-aside h1{font:700 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;margin:0 0 18px 6px;opacity:.6}
-.nav{background:none;border:1.5px solid transparent;color:var(--c);text-align:left;padding:12px 14px;font:600 16px Georgia,serif;cursor:pointer;border-radius:8px;display:flex;justify-content:space-between}
-.nav small{font:12px ui-monospace,monospace;opacity:.6}
-.nav:hover{border-color:#fffdf27a}.nav.on{background:var(--c);color:var(--k)}
-main{flex:1;overflow-y:auto;padding:34px 44px 60px}
-.wrap{max-width:860px;margin:auto}
-h2{font-size:34px;margin:0 0 4px;letter-spacing:-.02em}
-.sub{margin:0 0 20px;opacity:.65;font-size:14px}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;position:sticky;top:0;background:var(--c);padding:8px 0;z-index:2}
-.chip{border:1.5px solid var(--k);background:var(--c);color:var(--k);padding:6px 16px;border-radius:99px;font:600 13px ui-monospace,monospace;cursor:pointer}
-.chip.on{background:var(--k);color:var(--c)}
-.card{border:1.5px solid var(--k);border-radius:12px;padding:18px 20px;margin-bottom:16px;background:var(--c);box-shadow:4px 4px 0 var(--k)}
-.meta{display:flex;gap:8px;align-items:center;font:11px ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;flex-wrap:wrap}
-.meta b{background:var(--k);color:var(--c);padding:2px 8px;border-radius:4px}
-.meta span{border:1px solid var(--k);padding:1px 7px;border-radius:4px}
-.meta i{margin-left:auto;font-style:normal;opacity:.7}
-.q{white-space:pre-wrap;margin:0}
-pre{background:var(--k);color:var(--c);padding:14px;border-radius:8px;overflow-x:auto;font:12.5px/1.5 ui-monospace,Menlo,monospace;margin:12px 0 0;max-width:100%}
-.n{font:700 13px ui-monospace,monospace;margin-right:6px}
-.tg{display:block;width:42px;height:42px;border:1.5px solid var(--k);background:var(--c);color:var(--k);border-radius:10px;font-size:18px;cursor:pointer;margin-bottom:22px;box-shadow:3px 3px 0 var(--k)}.tg:active{transform:translate(2px,2px);box-shadow:none}
-.card{transition:transform .15s,box-shadow .15s}.card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--k)}.card.done{opacity:.5}
-.dn{margin-left:auto;border:1.5px solid var(--k);background:var(--c);color:var(--k);border-radius:6px;padding:2px 10px;font:600 11px ui-monospace,monospace;cursor:pointer;text-transform:none}.meta i+.dn{margin-left:8px}.card.done .dn{background:var(--k);color:var(--c)}
-.prog{margin-left:auto;align-self:center;font:12px ui-monospace,monospace;opacity:.7}
-.sub{padding-bottom:16px;border-bottom:1.5px solid var(--k)}pre{tab-size:4;white-space:pre;border:1.5px solid var(--k)}
-@media(max-width:760px){aside{position:fixed;left:0;top:0;bottom:0;z-index:20;width:240px;padding:26px 16px}body.shut aside{width:0;padding:0}main{padding:16px 16px 50px}h2{font-size:26px}}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--c:#FFFDF2;--k:#000}}
-</style></head><body>
-<aside><h1>QUESTION BANK</h1><button class="nav on" data-s="oops">OOPS<small id="n1"></small></button><button class="nav" data-s="coa">COA<small id="n2"></small></button></aside>
-<main><div class="wrap"><button id="tg" class="tg" aria-label="Toggle menu">☰</button><h2 id="t"></h2><p class="sub" id="d"></p><div class="chips" id="f"></div><div id="l"></div></div></main>
+:root{--cream:#FFFDF2;--black:#000000;--line:rgba(0,0,0,.16);--soft:rgba(0,0,0,.06);--side:260px;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;height:100%;background:var(--cream);color:var(--black);font:16px/1.6 Georgia,"Iowan Old Style","Times New Roman",serif}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--black);outline-offset:2px}
+.app{display:flex;height:100%}
+aside{width:var(--side);flex:none;border-right:2px solid var(--black);display:flex;flex-direction:column;background:var(--cream);overflow-y:auto}
+.brand{padding:26px 22px 18px;font-size:23px;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.brand small{display:block;margin-top:6px;font-size:13px;font-weight:400;opacity:.65}
+nav{padding:6px 12px 20px;display:flex;flex-direction:column;gap:3px}
+nav button{display:flex;justify-content:space-between;align-items:baseline;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:10px;cursor:pointer;font-size:16px}
+nav button span{font-size:13px;opacity:.7;font-variant-numeric:tabular-nums}
+nav button:hover{background:var(--soft)}
+nav button[aria-current="true"]{background:var(--black);color:var(--cream)}
+main{flex:1;min-width:0;overflow-y:auto}
+.wrap{max-width:780px;margin:0 auto;padding:40px 32px 90px}
+.menu{display:none;background:var(--black);color:var(--cream);border:0;border-radius:6px;padding:8px 12px;cursor:pointer;margin-bottom:14px}
+h1{font-size:clamp(34px,6vw,52px);line-height:1.05;letter-spacing:-.02em;margin:0}
+.sub{margin:10px 0 24px;opacity:.7}
+.seg{display:inline-flex;border:2px solid var(--black);border-radius:8px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:8px 22px;cursor:pointer;font-size:16px}
+.seg button+button{border-left:2px solid var(--black)}
+.seg button[aria-pressed="true"]{background:var(--black);color:var(--cream)}
+h2{font-size:19px;margin:34px 0 0;padding-bottom:8px;border-bottom:2px solid var(--black)}
+.q{border-bottom:1px solid var(--line);padding:20px 0}
+.qh{display:flex;gap:14px}
+.n{flex:none;width:2.2em;font-weight:700;font-variant-numeric:tabular-nums}
+.qt{flex:1;min-width:0}
+.qt p{margin:0 0 8px}
+.qt .ttl{font-weight:700}
+.qt ol{margin:6px 0 10px;padding-left:1.3em}
+.qt li{margin:2px 0}
+.tag{display:inline-block;border:1px solid var(--black);border-radius:4px;padding:0 8px;font-size:13px;margin-right:6px}
+.tag.f{background:var(--black);color:var(--cream)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;background:var(--soft);padding:1px 5px;border-radius:3px}
+pre{margin:8px 0;padding:10px 12px;background:var(--soft);border-left:3px solid var(--black);overflow-x:auto;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.note{margin:18px 0 0;opacity:.75;font-size:15px}
+.scrim{display:none}
+.tw{overflow-x:auto;margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:8px 14px 8px 0}
+th{border-bottom:2px solid var(--black)}
+td:first-child{font-weight:700;white-space:nowrap}
+@media(max-width:820px){
+ aside{position:fixed;inset:0 auto 0 0;z-index:20;transform:translateX(-100%);transition:transform .22s;padding-top:env(safe-area-inset-top,0px)}
+ body.nav aside{transform:none}
+ body.nav .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10}
+ .menu{display:inline-block}
+ .wrap{padding:20px 18px 80px}
+}
+@media(prefers-reduced-motion:reduce){aside{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+ <aside id="side" aria-label="Subjects">
+  <div class="brand">Question Bank<small>NIT Jalandhar</small></div>
+  <nav id="nav"></nav>
+ </aside>
+ <div class="scrim" id="scrim"></div>
+ <main id="main"><div class="wrap">
+  <button class="menu" id="menu">Subjects</button>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="seg" id="seg" role="group" aria-label="Question type">
+   
+  </div>
+  <div id="list"></div>
+ </div></main>
+</div>
 <script>
-const O=(t,g,m,q,c)=>({t,g,m,q,c});
-const OOPS=[
-O('code','File Handling','5','Student Attendance: read roll, name, attendance% of N students; store in students.txt (ofstream); reopen with ifstream; show students <75% and defaulter count.'),
-O('code','File Handling','5','Hospital Visitors (menu-driven, visitors.txt): add without deleting old records; display all with serial nos; create fresh log (truncate); show total visitors. Use proper open modes.'),
-O('code','File Handling','6','Railway Tickets (binary): struct Ticket{PNR,name,fare}. Store 5 records; count via tellg(); show 3rd record via seekg(); update a fare via seekp(); use ios::in|ios::out|ios::binary.'),
-O('code','File Handling','6','Employee Salary: read IDs/salaries from salary.txt. Error if open fails; detect bad salary with fail(); clear(); skip invalid and continue; print valid/invalid counts and total valid salary.'),
-O('code','Command-Line Args','5','fcopy: two filenames via argv. Check exactly two; copy char-by-char; error if source cannot open; count characters and lines; usage message for wrong args.'),
-O('code','Exceptions','5','Ticket Booking (100 seats): bookSeats(int n) throws int if n<=0, string if n>8, double (remaining seats) if insufficient. Separate catch blocks; process multiple requests without terminating.'),
-O('code','Exceptions','6','Banking: custom InsufficientBalance : std::exception. Balances in vector; transfer() throws InsufficientBalance / std::out_of_range (bad index); catch inside transfer(), print rollback, rethrow; handle in main() via catch(const exception&).'),
-O('code','Templates','5','Function templates: findMax() for array; showItem() with two template params (code, price); applyDiscount() with non-type template param. Demo with int, float, double, string.'),
-O('code','Templates','6','Class template Stack<T,int SIZE=10>: push, pop, display; throw on overflow and underflow. Demo Stack<int> and Stack<double,5>.'),
-O('code','STL','8','Course Registration: vector marks (sort); list waiting list; set unique course codes; multiset exam scores (count repeats); map roll->name; multimap course->students; equal_range() to list a course\'s students.'),
-O('code','Constructors','5','Patient (ID, name, age, ward): default, parameterized, copy constructor. Copy on ward transfer, modify only copy\'s ward, display both.'),
-O('code','Constructors','5','Product (name, price, qty, discount%): default; (name, price); (name, price, qty, optional discount). Compute final bill. Avoid constructor ambiguity.'),
-O('code','Constructors','5','Book: dynamically allocated title (new in ctor), author, price. Destructor frees memory. Create objects in main() and a nested block; show ctor/dtor order.'),
-O('code','Operator Overloading','6','Money (rupees, paise): + as member; - as friend (remaining budget); * as friend (multiple items). Normalize paise >99.'),
-O('code','Operator Overloading','6','Distance (km, m): prefix ++ and postfix ++ (+100 m), unary - (shortfall), binary +, == and >. Demo all in main().'),
-O('code','Type Conversion','6','Celsius & Fahrenheit: basic->class (conversion ctor); class->basic (conversion operator); Celsius->Fahrenheit via ctor in Fahrenheit and via casting operator in Celsius. Demo all three.'),
-O('code','Inheritance','6','Person: private ID, protected name, public city. Student publicly derived, Staff privately derived. Friend class AuditOffice accesses private ID. Show which members are accessible from derived classes and main().'),
-O('code','Inheritance','6','Hybrid: Student(roll,name) -> Test(2 subject marks), Sports(marks) -> Result(Test, Sports). Total marks, display all, resolve ambiguity of show(), demonstrate constructor order.'),
-O('code','Containership','5','Engine(capacity), GPS(model), Car has Engine+GPS, ElectricCar : Car (battery range). Constructors, display details, inheritance vs containership, ctor order.'),
-O('code','Polymorphism','8','Abstract Employee with pure virtual calculateSalary(); FullTime(monthly), PartTime(hours, rate), Intern(stipend). Employee* array, single display loop; explain what changes if calculateSalary() is not virtual.'),
-O('theory','Encapsulation','2','How does encapsulation ensure data security? Should all attributes be public and methods private? Justify.'),
-O('theory','Functions','3','void example(int x, int y = 5, int z); — explain the issue and ways to correct it.'),
-O('theory','Static','2','Why can a static member function access only static data members?'),
-O('theory','Constructors','3','Can a constructor parameter have the same name as a member variable? Issues and fixes, with code.'),
-O('theory','Functions','2','When is pass-by-value better than pass-by-reference, and vice versa?'),
-O('theory','Friend','3','Class A (private x) declares class B friend; B (private y) declares non-member print() friend. Can print() access x and y? Justify; if not, give a solution.'),
-O('theory','Constructors','2','Can a constructor be explicitly invoked like a regular member function? Justify with example.'),
-O('theory','Constructors','3','Default constructor vs constructor with default parameters; when to use each; limitations of default constructor.'),
-O('theory','Inheritance','2','Multiple inheritance: two bases with same-signature function — any problem? How to resolve explicitly?'),
-O('theory','Polymorphism','3','Animal (pure virtual fn + ctor), Dog implements it. Constructor call sequence for Dog? Can Animal\'s ctor be called explicitly from outside Dog?'),
-O('theory','Exceptions','2','Handling multiple exception types with catch blocks, with example.'),
-O('theory','Templates','3','What is a function template with a parameter? Code: max of two numbers of different types (int, float, double).'),
-O('theory','STL','4','What is the STL? Function of containers; list at least three container types with examples.'),
-O('theory','Inheritance','2.5','Constructor/destructor order in multiple, hybrid, virtual inheritance. How do virtual bases alter left-to-right, depth-first order?'),
-O('theory','Memory','2.5','Shallow copy vs deep copy vs move semantics: ownership, lifetime, efficiency, appropriate scenarios.'),
-O('theory','Static','—','How do access specifiers apply to static members? Why are private static members used for safe global-like behaviour?'),
-O('theory','Justify T/F','—','A class with at least one virtual function is guaranteed to have its vptr at the beginning of the object layout.'),
-O('theory','Justify T/F','—','If a template class has a static data member, each instantiation gets its own separate copy.'),
-O('theory','Justify T/F','—','When an exception is thrown during stack unwinding, the program always terminates immediately without running remaining destructors.'),
-O('theory','Justify T/F','—','If a class overloads the comma operator, the overloaded version is used even in a for-loop\'s increment expression.'),
-O('theory','Justify T/F','—','Deleting a base-class pointer that does not point to the first non-static data member (pointer arithmetic) is UB even if the base has a virtual destructor.'),
-O('output','Static · Dec 2025 Q5(a)','—','Predict the output.',`class A{static int x;public:
- static void f(){cout<<x<<" ";x++;}};
-int A::x=[](){cout<<"init ";return 5;}();
-int main(){A a,b;a.f();b.f();A::f();}`),
-O('output','Static/setw · Dec 2025 Q5(a)','—','Predict the output.',`class X{static int v;public:
- static int get(){cout<<setw(v)<<v;return v--;}};
-int X::v=[](){cout<<setfill('*')<<setw(4)<<2;return 2;}();
-int main(){X::get();cout<<" ";X::get();}`),
-O('output','String · Dec 2025 Q6','—','Predict the output of each statement.',`string s="WelcomeUser";
-s.insert(7,"***");cout<<s<<endl;
-s.erase(7,3);cout<<s<<endl;
-s.replace(7,4,"Friend");cout<<s<<endl;
-s.append("_C++");cout<<s<<endl;
-s.push_back('?');cout<<s<<endl;
-s.pop_back();cout<<s<<endl;
-string sub=s.substr(0,5);cout<<sub<<endl;
-int pos=s.find("Universe");cout<<pos<<endl;
-cout<<s.compare("Hello")<<endl;
-s.resize(8);cout<<s<<endl;
-string t="Sample";swap(s,t);cout<<s<<" "<<t<<endl;
-s.clear();cout<<(s.empty()?"Yes":"No")<<endl;`),
-O('output','Virtual Inheritance · Dec 2025 Q6','—','Predict the complete output (ctor/dtor, virtuals, slicing).',`class A{public:int x=100;A(){cout<<"[A-constructed] ";}
- virtual void show(){cout<<"A::show{"<<x<<"} ";}
- ~A(){cout<<"[A-destructed] ";}};
-class B:virtual public A{public:int x=200;B(){cout<<"[B-constructed] ";}
- void show()override{cout<<"B::show{"<<x<<"} ";}~B(){cout<<"[B-destructed] ";}};
-class C:virtual public A{public:int x=300;C(){cout<<"[C-constructed] ";}
- void show()override{cout<<"C::show{"<<x<<"} ";}~C(){cout<<"[C-destructed] ";}};
-class D:public B,public C{public:int x=400;D(){cout<<"[D-constructed] ";}
- void show()override{cout<<"D::show{"<<x<<"} ";}~D(){cout<<"[D-destructed] ";}};
-void display(A obj){obj.show();}
-int main(){D d;A*p=&d;p->show();display(d);
- cout<<d.B::x<<" "<<d.C::x<<" ";}`),
-O('output','Ctor/Dtor Order · Predicted','—','Predict the output.',`class A{public:A(){cout<<"A ";}~A(){cout<<"~A ";}};
-class B:public A{public:B(){cout<<"B ";}~B(){cout<<"~B ";}};
-class C:public B{public:C(){cout<<"C ";}~C(){cout<<"~C ";}};
-int main(){C obj;}`),
-O('output','Ctor Overloading · Predicted','—','Is this valid C++? Identify the ambiguity before predicting output.',`class Student{int roll;public:
- Student(){roll=0;cout<<"Default ";}
- Student(int r=10){roll=r;cout<<"Parameterized ";}
- void display(){cout<<roll<<" ";}};
-int main(){Student s1;Student s2(20);s1.display();s2.display();}`),
-O('output','Static · Predicted','—','Predict the output.',`class Counter{static int count;public:
- Counter(){count++;}void display(){cout<<count<<" ";}};
-int Counter::count=0;
-int main(){Counter a,b;a.display();Counter c;b.display();c.display();}`),
-O('output','Virtual Functions · Predicted','—','Predict the output.',`class Base{public:virtual void show(){cout<<"Base ";}};
-class Derived:public Base{public:void show()override{cout<<"Derived ";}};
-int main(){Base b;Derived d;Base*p;p=&b;p->show();p=&d;p->show();}`),
-O('output','Object Slicing · Predicted','—','Predict the output.',`class Base{public:virtual void show(){cout<<"Base ";}};
-class Derived:public Base{public:void show()override{cout<<"Derived ";}};
-void display(Base obj){obj.show();}
-int main(){Derived d;Base*p=&d;p->show();display(d);}`),
-O('output','Diamond · Predicted','—','Predict the output.',`class A{public:A(){cout<<"A ";}};
-class B:virtual public A{public:B(){cout<<"B ";}};
-class C:virtual public A{public:C(){cout<<"C ";}};
-class D:public C,public B{public:D(){cout<<"D ";}};
-int main(){D obj;}`),
-O('output','Exceptions · Predicted','—','Predict the output.',`try{cout<<"Start ";throw 10;cout<<"End ";}
-catch(int x){cout<<"Integer ";}
-catch(...){cout<<"Default ";}
-cout<<"Outside";`),
-O('output','Stack Unwinding · Predicted','—','Predict the output.',`class A{public:A(){cout<<"A+ ";}~A(){cout<<"A- ";}};
-void test(){A a;cout<<"Inside ";throw 10;}
-int main(){try{test();}catch(int x){cout<<"Caught ";}cout<<"End";}`),
-O('output','Prefix/Postfix · Predicted','—','Predict the output.',`class Number{int x;public:Number(int a){x=a;}
- Number operator++(){++x;return *this;}
- Number operator++(int){Number temp=*this;x++;return temp;}
- void display(){cout<<x<<" ";}};
-int main(){Number n(5);(n++).display();n.display();(++n).display();}`),
-O('output','Copy Ctor · Predicted','—','Predict the output.',`class Test{int x;public:Test(int a){x=a;}
- Test(const Test&t){x=t.x;cout<<"Copy ";}
- void display(){cout<<x<<" ";}};
-int main(){Test t1(10);Test t2=t1;t1.display();t2.display();}`),
-O('output','Templates · Predicted','—','Predict the output.',`template<class T>void display(T x){cout<<x<<" ";}
-int main(){display(10);display(10.5);display('A');}`),
-O('output','Template Static · Predicted','—','Predict the output.',`template<class T>class Counter{static int count;public:
- Counter(){count++;}void show(){cout<<count<<" ";}};
-template<class T>int Counter<T>::count=0;
-int main(){Counter<int>a,b;Counter<float>c;a.show();c.show();
- Counter<int>d;b.show();}`),
-O('output','Ambiguity · Predicted','—','Predict the output.',`class A{public:void show(){cout<<"A ";}};
-class B{public:void show(){cout<<"B ";}};
-class C:public A,public B{};
-int main(){C obj;obj.A::show();obj.B::show();}`),
-O('output','Virtual Dtor · Predicted','—','Predict the output.',`class Base{public:Base(){cout<<"Base+ ";}virtual ~Base(){cout<<"Base- ";}};
-class Derived:public Base{public:Derived(){cout<<"Derived+ ";}~Derived(){cout<<"Derived- ";}};
-int main(){Base*p=new Derived();delete p;}`)
-];
-const C=(t,g,m,q)=>({t,g,m,q});
-const COA=[
-C('num','Cache · Dec 2025 Q1(a)','4','Two-level cache: L1 access 1 ns, hit 90%. L2 hit 80%, L2→L1 miss penalty 10 ns. Main memory→L2 miss penalty 100 ns. Find average memory access time.'),
-C('num','Cache · Dec 2025 Q1(b)','4','Block-set associative cache: 128 blocks in four-block sets. Main memory 16,384 blocks, each 256 eight-bit words. (i) Bits to address main memory? (ii) Bits for TAG, SET, WORD?'),
-C('num','Cache · Dec 2024 Q6(a)','2','L1 hit 90%, L2 hit 92%; L1 2 cycles, L2 10 cycles, memory 100 cycles. Find T_avg in cycles.'),
-C('num','Cache · Dec 2024 Q7(a)','3','Hit rate 60%, cache access 17 ns, initial miss penalty 50 ns; penalty rises from 60 ns to 100 ns. (i) Initial effective access time. (ii) New effective access time. (iii) Explain the effect of higher miss penalty.'),
-C('num','DMA · Dec 2025 Q2(b)','4','Hard disk on a 150 MHz processor via DMA. DMA setup = 1000 cycles. Disk rate 8000 KBPS, average block 8 KB. What fraction (%) of processor time does the disk consume if transferring 100% of the time?'),
-C('num','Pipeline · Dec 2024 Q2','5','5-stage pipeline: 40, 60, 70, 50, 80 ns; latch delay 5 ns. Find (i) cycle time, (ii) non-pipelined time for 500 tasks, (iii) speedup, (iv) pipelined time for 500 tasks, (v) throughput (tasks/s).'),
-C('num','Pipeline · Dec 2024 Q3(a)','—','5-stage pipeline: OR R1,R2,R3 / OR R2,R1,R4 / OR R1,R1,R2. (i) Dependencies and types. (ii) No forwarding: hazards, add NOPs. (iii) Full forwarding: hazards, add NOPs.'),
-C('num','Pipeline · Dec 2025 Q4(a)','5','5-stage pipeline FI, DI, FO, EI, WO = 5, 7, 10, 8, 6 ns; buffer delay 1 ns each; no branch prediction. 12 instructions I1–I12; I4 is the only branch, target I9. If taken, find the time to complete the program.'),
-C('num','Control Unit · Dec 2025 Q3(b)','4','Hardwired CPU, signals S1–S10, steps T1–T5, instructions I1–I4.\nI1: T1 S1,S3,S5 | T2 S2,S4,S6 | T3 S1,S7 | T4 S10 | T5 S3,S8\nI2: T1 S1,S3,S5 | T2 S8,S9,S10 | T3 S5,S6,S7 | T4 S6 | T5 S10\nI3: T1 S1,S3,S5 | T2 S7,S8,S10 | T3 S2,S6,S9 | T4 S10 | T5 S1,S3\nI4: T1 S1,S2,S5 | T2 S2,S6,S7 | T3 S5,S10 | T4 S6,S9 | T5 S10\nFind expressions for S1, S3, S5, S10.'),
-C('num','Basic Computer · Dec 2025 Q5(a)','4','PC = 3AF, AC = 7EC3, M[3AF] = 932E, M[32E] = 09AC, M[9AC] = 8B9F (hex). (i) Next instruction fetched and executed? (ii) Binary operation in AC. (iii) PC, AR, DR, AC, IR in hex and E, I, SC in binary at end of instruction cycle.'),
-C('num','Addressing · Dec 2025 Q5(b)','4','Memory: load-to-AC at 200, address field 500. PC=200, R1=400, IR=100.\nMem: 201→500 | 202→next | 399→450 | 400→700 | 500→800 | 600→900 | 702→325 | 800→300 | 900→320.\nFind effective address and operand for: register indirect, relative, index, direct.'),
-C('num','Cache · Practice','4','Cache access 4 ns, hit ratio 90%, miss penalty 40 ns. Find (i) miss ratio, (ii) AMAT.'),
-C('num','Cache · Practice','5','L1 hit 90%, L2 local hit 80%; L1 2 ns, L2 10 ns, memory 100 ns. Find AMAT (L2 accessed only on L1 miss).'),
-C('num','Cache · Practice','4','Direct-mapped cache, 64 lines; memory 4096 blocks × 16 words. Find address bits, index bits, word bits, tag bits.'),
-C('num','Cache · Practice','4','256-block cache, 4-way set-associative; memory 16,384 blocks × 32 words. Find number of sets, SET, WORD, TAG bits.'),
-C('num','Cache · Practice','4','Cache 5 ns, miss penalty 60 ns, hit 95%. (i) AMAT. (ii) AMAT if hit ratio falls to 80%. (iii) Difference.'),
-C('num','DMA · Practice','4','200 MHz processor, DMA setup 2000 cycles, disk 10 MB/s, 4 KB blocks. % processor time used by DMA setup under continuous transfer.'),
-C('num','DMA · Practice','3','DMA moves 64 KB at 8 MB/s. Total transfer time?'),
-C('num','DMA · Practice','4','100 MHz processor, 500 setup cycles per transfer, 200 blocks/s. (i) Cycles consumed per second. (ii) % processor time.'),
-C('num','Pipeline · Practice','3','4-stage pipeline: 20, 30, 40, 25 ns; latch 5 ns. Find the cycle time.'),
-C('num','Pipeline · Practice','4','5-stage pipeline, 100 instructions, 10 ns clock, no stalls. (i) Total cycles (ii) total time (iii) throughput (instr/s).'),
-C('num','Pipeline · Practice','4','Non-pipelined: 150 ns/instruction. Pipelined: 50 ns clock, 5 stages. Speedup for 100 instructions (ideal)?'),
-C('num','Pipeline · Practice','4','5-stage pipeline, 20 instructions, 10 ns clock; two taken branches each cost 2 cycles. Total execution time?'),
-C('num','Pipeline · Practice','5','ADD R1,R2,R3 / SUB R4,R1,R5 / MUL R6,R4,R1 / ADD R7,R6,R2. Identify (i) data dependencies (ii) types (iii) possible hazards (iv) how forwarding resolves them.'),
-C('num','Control Unit · Practice','4','S1 active: I1 at T1,T2; I2 at T1,T3; I3 at T2; I4 at T1,T2. Derive Boolean expression for S1.'),
-C('num','Control Unit · Practice','4','I1: T1 S1,S2 | T2 S2,S3 | T3 S1\nI2: T1 S1,S3 | T2 S1,S2 | T3 S2\nI3: T1 S2,S3 | T2 S1 | T3 S1,S3\nI4: T1 S1 | T2 S2,S3 | T3 S1,S2\nDerive Boolean expressions for S1, S2, S3.'),
-C('num','Basic Computer · Practice','4','PC=300, AC=5000, M[300]=0120, M[120]=00F0. Instruction at 300 is a direct AND. Find (i) opcode and address field (ii) operand fetched (iii) final AC.'),
-C('num','Addressing · Practice','5','PC=100, R1=200, address field=300. Mem: 200→400, 300→500, 400→600, 500→700, 600→800. EA and operand for direct, register indirect, indexed (R1), relative (PC = next instruction).'),
-C('theory','Registers · Dec 2024 Q1','5','Differentiate processor register and memory register: roles, functionality; give an example.'),
-C('theory','Control Unit · Dec 2024 Q3(b)','—','Explain the components of the control unit with a diagram.'),
-C('theory','Control Unit · Dec 2024 Q6(b)','—','Compare microprogrammed vs hardwired control unit (speed, flexibility, complexity). Why is one preferred in certain applications?'),
-C('theory','Cache · Dec 2024 Q4','5','What is a mapping function? Ways a cache can be mapped? Explain each technique with an example.'),
-C('theory','Memory · Dec 2024 Q5(a)','—','Explain memory hierarchy with a diagram; roles of registers, cache, main memory, secondary storage.'),
-C('theory','Interrupts/IO · Dec 2024 Q5(b)','—','What is an interrupt and its types? Explain functions of the standard I/O interface.'),
-C('theory','Architecture · Dec 2024 Q7(b)','—','What is a superscalar processor? How does it differ from a scalar processor in instruction execution?'),
-C('theory','Pipelining · Dec 2024 Q8','5','Explain pipelining; types of hazards with diagrams; how conflict resolution is carried out.'),
-C('theory','Short Notes · Dec 2024 Q9','2 each','Short note with example: (i) Loop Buffer (ii) Code Converter (iii) Memory Interleaving (iv) Virtual Memory (v) RAID.'),
-C('theory','DMA · Dec 2025 Q2(a)','5','Explain DMA controller with block diagram. How does DMA reduce CPU involvement? Differentiate cycle stealing and burst mode.'),
-C('theory','Control Unit · Dec 2025 Q3(a)','4','Explain Delay Element and Sequence Counter methods of hardwired control with diagram; justify which is better.'),
-C('theory','Cache · Dec 2025 Q4(b)','5','Explain cache mapping techniques in detail with diagrams and examples.'),
-C('theory','Interrupts/IO · Dec 2025 Q6(a)','4','What is an interrupt? Describe interrupt-driven input/output.'),
-C('theory','Short Notes · Dec 2025 Q6(b)','1.5 each','Short notes: (i) Virtual Memory (ii) Differentiate RISC and CISC.')
-];
-const S={oops:{n:'OOPS',d:'Object-Oriented Programming · CSDC0203 · NIT Jalandhar',data:OOPS,f:[['all','All'],['code','Code'],['theory','Theory'],['output','Output']]},
-coa:{n:'COA',d:'Computer Organization & Architecture · Dec 2024 / Dec 2025 papers + practice',data:COA,f:[['all','All'],['num','Numericals'],['theory','Theory']]}};
-const L={code:'Code',theory:'Theory',output:'Output',num:'Numerical'};
-let cur='oops',flt={oops:'all',coa:'all'},D=new Set;
-try{D=new Set(JSON.parse(localStorage.getItem('qb')||'[]'))}catch(e){}
-const upd=()=>{const e=document.getElementById('pg');if(e)e.textContent=[...D].filter(k=>k.startsWith(cur)).length+' / '+S[cur].data.length+' done'};
-function fmt(src){src=src.replace(/(template<class T>)/g,'$1\u0001').replace(/\s*\n\s*/g,' ');
-const out=[];let cur='',ind=0,par=0,i=0;const push=(s,d=0)=>{s=s.trim();if(s)out.push('    '.repeat(Math.max(0,ind+d))+s)};
-while(i<src.length){const c=src[i],n=src[i+1];
-if(c=='"'||c=="'"){let j=i+1;while(src[j]!=c){if(src[j]=='\\')j++;j++}cur+=src.slice(i,j+1);i=j+1;continue}
-if(c=='\u0001'){push(cur);cur='';i++;continue}
-if(c=='(')par++;else if(c==')')par--;
-if(c=='{'){push(cur+' {');cur='';ind++;i++;continue}
-if(c=='}'){push(cur);cur='';ind--;const r=src.slice(i+1).trimStart();if(/^(;|\(|catch|else)/.test(r))cur='}';else push('}');i++;continue}
-if(c==';'&&par<=0){push(cur+';');cur='';i++;continue}
-if(c==':'&&n!=':'&&src[i-1]!=':'&&/^(public|private|protected)$/.test(cur.trim())){push(cur.trim()+':',-1);cur='';i++;continue}
-if(c=='<'&&n=='<'){cur=cur.trimEnd()+' << ';i+=2;while(src[i]==' ')i++;continue}
-if(c==','){cur+=', ';i++;while(src[i]==' ')i++;continue}
-if(c=='='&&n!='='&&!'=<>!'.includes(src[i-1]||'x')){cur=cur.trimEnd()+' = ';i++;while(src[i]==' ')i++;continue}
-if(c==' '&&(cur==''||cur.endsWith(' '))){i++;continue}
-cur+=c;i++}
-push(cur);
-const fx=l=>l.replace(/^(\s*class \w+):/,'$1 : ').replace(/\)override/,') override').replace(/\b(catch|if|for|while)\(/g,'$1 (').replace(/([A-Za-z])\*([a-z])/g,'$1 *$2').replace(/(\w)&(\w)/g,'$1 &$2');
-const res=[];out.forEach((l,k)=>{if(k&&/^(class|void|int main|int \w+::|template)/.test(l)&&/^\}/.test(out[k-1]))res.push('');res.push(fx(l))});return res.join('\n')}
-function draw(){const s=S[cur];t.textContent=s.n;d.textContent=s.d;
-f.innerHTML='';s.f.forEach(([k,v])=>{const b=document.createElement('button');b.className='chip'+(flt[cur]==k?' on':'');
-b.textContent=v+' ('+(k=='all'?s.data.length:s.data.filter(x=>x.t==k).length)+')';b.onclick=()=>{flt[cur]=k;draw()};f.appendChild(b)});const pg=document.createElement('span');pg.className='prog';pg.id='pg';f.appendChild(pg);
-l.innerHTML='';s.data.forEach((x,i)=>{if(flt[cur]!='all'&&x.t!=flt[cur])return;
-const c=document.createElement('div');c.className='card';
-const m=document.createElement('div');m.className='meta';
-const b=document.createElement('b');b.textContent=L[x.t];const g=document.createElement('span');g.textContent=x.g;m.append(b,g);
-if(x.m!='—'){const i2=document.createElement('i');i2.textContent=x.m+(/\d$/.test(x.m)?' marks':'');m.append(i2)}
-const q=document.createElement('p');q.className='q';const n=document.createElement('span');n.className='n';n.textContent='Q'+(i+1);q.append(n,x.q);
-const k=cur+i,dn=document.createElement('button');dn.className='dn';const sy=()=>{dn.textContent=D.has(k)?'✓ Done':'Mark done';c.classList.toggle('done',D.has(k))};sy();dn.onclick=()=>{D.has(k)?D.delete(k):D.add(k);try{localStorage.setItem('qb',JSON.stringify([...D]))}catch(e){}sy();upd()};m.append(dn);
-c.append(m,q);if(x.c){const p=document.createElement('pre');p.textContent=fmt(x.c);c.append(p)}l.append(c)});
-document.querySelector('main').scrollTop=0;upd()}
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{cur=b.dataset.s;if(innerWidth<760)document.body.classList.add('shut');document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('on',x==b));draw()});
-if(innerWidth<760)document.body.classList.add('shut');tg.onclick=()=>document.body.classList.toggle('shut');n1.textContent=OOPS.length;n2.textContent=COA.length;draw();
-</script></body></html>
+// Add a subject by adding another object to BANK with the same shape.
+const BANK = [{
+ name:"OOPS",
+ sections:["File Handling and Command-Line Arguments","Exception Handling","Templates and STL","Constructors and Destructors","Operator Overloading and Type Conversion","Inheritance and Polymorphism"],
+ code:[
+ {s:0,m:5,t:"Student Attendance Management System",r:["Accept roll number, name and attendance percentage of N students.","Store all records in `students.txt` using `ofstream`.","Reopen the file using `ifstream`.","Display students whose attendance is below 75%.","Display the total number of defaulters."]},
+ {s:0,m:5,t:"Hospital Visitor Management System",i:"Write a menu-driven C++ program to manage visitor records in `visitors.txt`. Use appropriate file-opening modes for each operation.",r:["Add new visitor records without deleting existing records.","Display all visitor records with serial numbers.","Create a fresh log by removing previous contents.","Display the total number of visitors."]},
+ {s:0,m:6,t:"Railway Ticket Management Using Binary Files",i:"Define a structure `Ticket` containing PNR number, passenger name and fare.",r:["Store five ticket records in a binary file.","Calculate the total number of records using `tellg()`.","Display the third record directly using `seekg()`.","Update the fare of a particular ticket using `seekp()`.","Use `ios::in | ios::out | ios::binary`."]},
+ {s:0,m:6,t:"Employee Salary File with Error Handling",i:"Read employee IDs and salaries from `salary.txt`.",r:["Display an error if the file cannot be opened.","Detect invalid salary values using `fail()`.","Clear the error state using `clear()`.","Skip invalid records and continue reading.","Display valid and invalid record counts and total valid salary."]},
+ {s:0,m:5,t:"File Copy Utility Using Command-Line Arguments",i:"Write a program named `fcopy` that accepts two filenames through command-line arguments.",r:["Verify that exactly two filenames are supplied.","Copy the source file into the destination file character by character.","Display an error if the source file cannot be opened.","Calculate the total number of characters and lines copied.","Display an appropriate usage message for incorrect arguments."]},
+ {s:1,m:5,t:"Online Ticket Booking System",i:"A cinema hall has 100 seats. Implement a function `bookSeats(int n)`.",r:["Throw an integer exception if the requested seats are zero or negative.","Throw a string exception if more than 8 seats are requested.","Throw a double exception containing the remaining seats if insufficient seats are available.","Use separate catch blocks for each exception.","Process multiple booking requests without terminating after an error."]},
+ {s:1,m:6,t:"Banking Transaction with Custom Exceptions",i:"Create a custom exception class `InsufficientBalance` derived from `std::exception`.",r:["Maintain account balances using a vector.","Implement a `transfer()` function to transfer money between accounts.","Throw `InsufficientBalance` if the sender has insufficient funds.","Throw `std::out_of_range` for an invalid account index.","Catch the exception inside `transfer()`, display a rollback message and rethrow it.","Handle the exception in `main()` using `catch(const exception& e)`."]},
+ {s:2,m:5,t:"Generic Inventory Management Using Function Templates",i:"Implement the following function templates and demonstrate them with integer, float, double and string values.",r:["`findMax()` to find the largest element in an array.","`showItem()` to display an item code and its price using two template parameters.","`applyDiscount()` to calculate a discount using a non-type template parameter."]},
+ {s:2,m:6,t:"Generic Stack Implementation",i:"Create a class template `Stack<T, int SIZE = 10>`. Demonstrate it using `Stack<int>` and `Stack<double, 5>`.",r:["`push()` to insert an element.","`pop()` to remove an element.","`display()` to display the stack.","Throw an exception on stack overflow.","Throw an exception on stack underflow."]},
+ {s:2,m:8,t:"University Course Registration Using STL",i:"Write a C++ program demonstrating STL containers.",r:["Store student marks in a vector and sort them.","Use a list to maintain a waiting list.","Use a set to store unique course codes.","Use a multiset to store examination scores and count repeated scores.","Use a map to associate roll numbers with student names.","Use a multimap to associate course codes with multiple student names.","Use `equal_range()` to display all students registered in a particular course."]},
+ {s:3,m:5,t:"Patient Record Management",i:"Create a class `Patient` containing patient ID, name, age and ward. Create a patient object, copy it when the patient is transferred to another ward, modify only the copied object’s ward and display both records.",r:["Default constructor.","Parameterized constructor.","Copy constructor."]},
+ {s:3,m:5,t:"Product Billing System",i:"Create a class `Product` containing product name, price, quantity and discount percentage. Calculate and display the final bill for each product. Avoid constructor ambiguity.",r:["Default constructor.","Constructor accepting name and price.","Constructor accepting name, price, quantity and an optional discount percentage."]},
+ {s:3,m:5,t:"Dynamic Memory Allocation in Constructors",i:"Create a class `Book` containing a dynamically allocated book title, author name and price.",r:["Allocate memory for the title using `new` inside the constructor.","Implement a destructor to release dynamically allocated memory.","Create objects in `main()` and inside a nested block.","Display constructor and destructor execution order."]},
+ {s:4,m:6,t:"Expense Tracker Using Operator Overloading",i:"Create a class `Money` containing rupees and paise. Ensure that paise are normalized whenever their value exceeds 99.",r:["Overload `+` as a member function to add two expenses.","Overload `-` as a friend function to calculate the remaining budget.","Overload `*` as a friend function to calculate the cost of multiple identical items."]},
+ {s:4,m:6,t:"Fitness Tracker Using Unary and Binary Operators",i:"Create a class `Distance` containing kilometres and metres. Demonstrate all overloaded operators in `main()`.",r:["Prefix `++` to increase the distance by 100 metres.","Postfix `++` to increase the distance by 100 metres.","Unary `-` to represent a distance shortfall.","Binary `+` to add two distances.","Relational operators `==` and `>` to compare distances."]},
+ {s:4,m:6,t:"Temperature Conversion Using User-Defined Types",i:"Create two classes, `Celsius` and `Fahrenheit`. Demonstrate all three types of conversion.",r:["Basic-to-class conversion using a conversion constructor.","Class-to-basic conversion using a conversion operator.","Celsius-to-Fahrenheit conversion using a constructor in the Fahrenheit class.","Celsius-to-Fahrenheit conversion using a casting operator in the Celsius class."]},
+ {s:5,m:6,t:"University Information Management System",i:"Create a base class `Person` with private member ID, protected member Name and public member City.",r:["Derive `Student` publicly from `Person`.","Derive `Staff` privately from `Person`.","Create a friend class `AuditOffice` that accesses the private ID of `Person`.","Demonstrate which inherited members can be accessed from derived classes and `main()`."]},
+ {s:5,m:6,t:"University Result Management Using Hybrid Inheritance",i:"`Student` stores roll number and name. `Test` inherits from `Student` and stores marks in two subjects. `Sports` inherits from `Student` and stores sports marks. `Result` inherits from `Test` and `Sports`.",r:["Calculate the total marks.","Display all student details.","Resolve ambiguity when both `Test` and `Sports` contain a function named `show()`.","Demonstrate constructor execution order."]},
+ {s:5,m:5,t:"Car Rental System Using Containership",i:"`Engine` stores engine capacity. `GPS` stores GPS model. `Car` contains objects of `Engine` and `GPS`. `ElectricCar` derives from `Car` and stores battery range.",r:["Implement constructors for all classes.","Display all vehicle details.","Demonstrate the difference between inheritance and containership.","Display constructor execution order."]},
+ {s:5,m:8,t:"Employee Payroll Using Runtime Polymorphism",i:"Create an abstract class `Employee` with a pure virtual function `calculateSalary()`. Derive `FullTime` (monthly salary), `PartTime` (working hours and hourly rate) and `Intern` (fixed stipend).",r:["Override `calculateSalary()` in all derived classes.","Store objects using an array of `Employee*`.","Display salaries using a single loop.","Demonstrate runtime polymorphism.","Explain what changes if `calculateSalary()` is not virtual."]}
+ ],
+ notes:[
+ {t:"1. File opening modes",p:"Pass modes as the second argument to `open()` or the stream constructor and combine them with `|`. Defaults: `ifstream` uses `ios::in`, `ofstream` uses `ios::out`.",rows:[["Mode","Meaning"],["ios::in","Open for reading. The file must already exist."],["ios::out","Open for writing. Creates the file if missing and erases existing contents (same as `ios::out | ios::trunc`)."],["ios::app","Append. Every write goes to the end, even if you seek elsewhere. Existing data is kept and the file is created if missing."],["ios::ate","Jump to the end when opening, but you may seek and write anywhere afterwards. Does not erase anything by itself."],["ios::trunc","Discard existing contents on opening. Implied by `ios::out` unless `ios::in` or `ios::app` is also given."],["ios::binary","Raw bytes with no newline translation. Use with `read()` and `write()` for fixed-size records."]],c:`ofstream a("log.txt", ios::app);   // add to the end, keep old data
+ofstream b("log.txt");              // erase and start fresh
+fstream  c("t.dat", ios::in | ios::out | ios::binary);  // read and update records
+fstream  d("log.txt", ios::in | ios::out | ios::ate);   // start at end, keep data`,n:"app vs ate: with `app` all writes are forced to the end. With `ate` only the starting position is the end, so you can still seek back and overwrite."},
+ {t:"2. seekg(), seekp(), tellg() and tellp()",p:"A file stream keeps a get pointer (next byte to read) and a put pointer (next byte to write). Positions are byte offsets from the start of the file.",rows:[["Function","Purpose"],["tellg()","Returns the current position of the get (read) pointer."],["tellp()","Returns the current position of the put (write) pointer."],["seekg(pos)","Moves the get pointer to an absolute byte position."],["seekg(off, dir)","Moves the get pointer `off` bytes relative to `dir`."],["seekp(pos), seekp(off, dir)","Same as seekg, but for the put pointer."]],c:`fstream f("tickets.dat", ios::in | ios::out | ios::binary);
+f.seekg(0, ios::end);
+long size = f.tellg();                  // file size in bytes
+int n = size / sizeof(Ticket);          // number of records
+
+Ticket t;
+f.seekg(2 * sizeof(Ticket), ios::beg);  // third record
+f.read((char*)&t, sizeof t);
+
+t.fare += 50;
+f.seekp(2 * sizeof(Ticket), ios::beg);  // go back and overwrite it
+f.write((char*)&t, sizeof t);`,n:"Record n starts at (n - 1) * sizeof(record). For an fstream, call seekg before reading and seekp before writing when you switch between the two. If a read hit the end of file, call `clear()` first, otherwise the seek may fail."},
+ {t:"3. Seek directions: ios::beg, ios::cur, ios::end",rows:[["Direction","Offset is measured from"],["ios::beg","The beginning of the file. Offset must be zero or positive."],["ios::cur","The current pointer position. Offset may be positive or negative."],["ios::end","The end of the file. Offset is usually zero or negative."]],c:`f.seekg(0, ios::beg);     // start of file
+f.seekg(5, ios::cur);     // skip 5 bytes forward
+f.seekg(-10, ios::end);   // 10 bytes before the end
+f.seekg(0, ios::end);     // at the end, so tellg() gives the file size`},
+ {t:"4. State functions: is_open(), good(), fail(), bad(), eof(), clear()",rows:[["Function","Purpose"],["is_open()","True if the file was opened successfully. Check it right after `open()`."],["good()","True only when no error flag is set."],["fail()","True if failbit or badbit is set: a failed operation such as a wrong-format read."],["bad()","True if badbit is set: a serious stream error."],["eof()","True if eofbit is set: a read tried to go past the end of the file."],["clear()","Resets the state flags to good so the stream can be used again. `clear(state)` sets a specific state."]],c:`ifstream f("salary.txt");
+if (!f.is_open()) { cout << "Cannot open file"; return 1; }
+
+int id; double sal, total = 0;
+int valid = 0, invalid = 0;
+while (!f.eof()) {
+    if (f >> id >> sal) { valid++; total += sal; }
+    else if (!f.eof()) {            // bad record, not the end
+        f.clear();                  // reset the error state
+        f.ignore(1000, '\\n');       // skip the rest of the line
+        invalid++;
+    }
+}`,n:"Do not write `while(!f.eof())` with a read inside and no check: eof() becomes true only after a read fails, so the last record is often processed twice. Checking the read itself, as above, avoids this."},
+ {t:"5. failbit vs badbit vs eofbit",rows:[["Flag","Set when","Test with","Recoverable?"],["eofbit","A read reaches the end of the file.","eof()","Yes. clear() resets it."],["failbit","An operation fails but the stream is intact: wrong format (letters into an int), nothing extracted, or a read past the end.","fail()","Yes. clear(), then discard the bad input."],["badbit","A serious error or loss of stream integrity, such as a read or write failure.","bad()","Usually not. Stop processing."]],n:"fail() is true if failbit or badbit is set. Reading past the end sets eofbit and failbit together. good() is true only when none of the three is set."}
+ ],
+ osections:["Previous-year questions","Additional predicted questions"],
+ output:[
+ {s:0,src:"Dec 2025 · Q5(a)",t:"Static data member and static member function",n:"Predict the output.",c:`#include <iostream>
+using namespace std;
+class A {
+    static int x;
+public:
+    static void f() {
+        cout << x << " ";
+        x++;
+    }
+};
+int A::x = []() {
+    cout << "init ";
+    return 5;
+}();
+int main() {
+    A a, b;
+    a.f();
+    b.f();
+    A::f();
+    return 0;
+}`},
+ {s:0,src:"Dec 2025 · Q5(a)",t:"Static initialization and setw()",n:"Predict the output.",c:`#include <iostream>
+#include <iomanip>
+using namespace std;
+class X {
+    static int v;
+public:
+    static int get() {
+        cout << setw(v) << v;
+        return v--;
+    }
+};
+int X::v = []() {
+    cout << setfill('*') << setw(4) << 2;
+    return 2;
+}();
+int main() {
+    X::get();
+    cout << " ";
+    X::get();
+    return 0;
+}`},
+ {s:0,src:"Dec 2025 · Q6",t:"String class operations",n:"Predict the output of each statement.",c:`#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+    string s = "WelcomeUser";
+    s.insert(7, "***");
+    cout << s << endl;
+    s.erase(7, 3);
+    cout << s << endl;
+    s.replace(7, 4, "Friend");
+    cout << s << endl;
+    s.append("_C++");
+    cout << s << endl;
+    s.push_back('?');
+    cout << s << endl;
+    s.pop_back();
+    cout << s << endl;
+    string sub = s.substr(0, 5);
+    cout << sub << endl;
+    int pos = s.find("Universe");
+    cout << pos << endl;
+    cout << s.compare("Hello") << endl;
+    s.resize(8);
+    cout << s << endl;
+    string t = "Sample";
+    swap(s, t);
+    cout << s << " " << t << endl;
+    s.clear();
+    cout << (s.empty() ? "Yes" : "No") << endl;
+    return 0;
+}`},
+ {s:0,src:"Dec 2025 · Q6",t:"Virtual inheritance, constructor order and polymorphism",n:"Predict the complete output. Pay attention to constructor calls, destructor calls, virtual functions, and object slicing.",c:`#include <iostream>
+using namespace std;
+class A {
+public:
+    int x = 100;
+    A() { cout << "[A-constructed] "; }
+    virtual void show() { cout << "A::show{" << x << "} "; }
+    ~A() { cout << "[A-destructed] "; }
+};
+class B : virtual public A {
+public:
+    int x = 200;
+    B() { cout << "[B-constructed] "; }
+    void show() override { cout << "B::show{" << x << "} "; }
+    ~B() { cout << "[B-destructed] "; }
+};
+class C : virtual public A {
+public:
+    int x = 300;
+    C() { cout << "[C-constructed] "; }
+    void show() override { cout << "C::show{" << x << "} "; }
+    ~C() { cout << "[C-destructed] "; }
+};
+class D : public B, public C {
+public:
+    int x = 400;
+    D() { cout << "[D-constructed] "; }
+    void show() override { cout << "D::show{" << x << "} "; }
+    ~D() { cout << "[D-destructed] "; }
+};
+void display(A obj) {
+    obj.show();
+}
+int main() {
+    D d;
+    A *p = &d;
+    p->show();
+    display(d);
+    cout << d.B::x << " " << d.C::x << " ";
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Constructor and destructor order",c:`#include <iostream>
+using namespace std;
+class A {
+public:
+    A() { cout << "A "; }
+    ~A() { cout << "~A "; }
+};
+class B : public A {
+public:
+    B() { cout << "B "; }
+    ~B() { cout << "~B "; }
+};
+class C : public B {
+public:
+    C() { cout << "C "; }
+    ~C() { cout << "~C "; }
+};
+int main() {
+    C obj;
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Constructor overloading and default arguments",n:"Check whether this program is valid C++. Identify any constructor ambiguity before predicting output.",c:`#include <iostream>
+using namespace std;
+class Student {
+    int roll;
+public:
+    Student() {
+        roll = 0;
+        cout << "Default ";
+    }
+    Student(int r = 10) {
+        roll = r;
+        cout << "Parameterized ";
+    }
+    void display() { cout << roll << " "; }
+};
+int main() {
+    Student s1;
+    Student s2(20);
+    s1.display();
+    s2.display();
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Static data shared between objects",c:`#include <iostream>
+using namespace std;
+class Counter {
+    static int count;
+public:
+    Counter() { count++; }
+    void display() { cout << count << " "; }
+};
+int Counter::count = 0;
+int main() {
+    Counter a, b;
+    a.display();
+    Counter c;
+    b.display();
+    c.display();
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Function overriding and virtual functions",c:`#include <iostream>
+using namespace std;
+class Base {
+public:
+    virtual void show() { cout << "Base "; }
+};
+class Derived : public Base {
+public:
+    void show() override { cout << "Derived "; }
+};
+int main() {
+    Base b;
+    Derived d;
+    Base *p;
+    p = &b;
+    p->show();
+    p = &d;
+    p->show();
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Object slicing",c:`#include <iostream>
+using namespace std;
+class Base {
+public:
+    virtual void show() { cout << "Base "; }
+};
+class Derived : public Base {
+public:
+    void show() override { cout << "Derived "; }
+};
+void display(Base obj) {
+    obj.show();
+}
+int main() {
+    Derived d;
+    Base *p = &d;
+    p->show();
+    display(d);
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Virtual inheritance and diamond problem",c:`#include <iostream>
+using namespace std;
+class A {
+public:
+    A() { cout << "A "; }
+};
+class B : virtual public A {
+public:
+    B() { cout << "B "; }
+};
+class C : virtual public A {
+public:
+    C() { cout << "C "; }
+};
+class D : public C, public B {
+public:
+    D() { cout << "D "; }
+};
+int main() {
+    D obj;
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Exception handling and catch blocks",c:`#include <iostream>
+using namespace std;
+int main() {
+    try {
+        cout << "Start ";
+        throw 10;
+        cout << "End ";
+    }
+    catch (int x) {
+        cout << "Integer ";
+    }
+    catch (...) {
+        cout << "Default ";
+    }
+    cout << "Outside";
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Exception handling and stack unwinding",c:`#include <iostream>
+using namespace std;
+class A {
+public:
+    A() { cout << "A+ "; }
+    ~A() { cout << "A- "; }
+};
+void test() {
+    A a;
+    cout << "Inside ";
+    throw 10;
+}
+int main() {
+    try {
+        test();
+    }
+    catch (int x) {
+        cout << "Caught ";
+    }
+    cout << "End";
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Operator overloading and prefix/postfix",c:`#include <iostream>
+using namespace std;
+class Number {
+    int x;
+public:
+    Number(int a) { x = a; }
+    Number operator++() {
+        ++x;
+        return *this;
+    }
+    Number operator++(int) {
+        Number temp = *this;
+        x++;
+        return temp;
+    }
+    void display() { cout << x << " "; }
+};
+int main() {
+    Number n(5);
+    (n++).display();
+    n.display();
+    (++n).display();
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Copy constructor and shallow copying",c:`#include <iostream>
+using namespace std;
+class Test {
+    int x;
+public:
+    Test(int a) { x = a; }
+    Test(const Test &t) {
+        x = t.x;
+        cout << "Copy ";
+    }
+    void display() { cout << x << " "; }
+};
+int main() {
+    Test t1(10);
+    Test t2 = t1;
+    t1.display();
+    t2.display();
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Function templates",c:`#include <iostream>
+using namespace std;
+template <class T>
+void display(T x) {
+    cout << x << " ";
+}
+int main() {
+    display(10);
+    display(10.5);
+    display('A');
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Template class with static data member",c:`#include <iostream>
+using namespace std;
+template <class T>
+class Counter {
+    static int count;
+public:
+    Counter() { count++; }
+    void show() { cout << count << " "; }
+};
+template <class T>
+int Counter<T>::count = 0;
+int main() {
+    Counter<int> a, b;
+    Counter<float> c;
+    a.show();
+    c.show();
+    Counter<int> d;
+    b.show();
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Multiple inheritance and function ambiguity",c:`#include <iostream>
+using namespace std;
+class A {
+public:
+    void show() { cout << "A "; }
+};
+class B {
+public:
+    void show() { cout << "B "; }
+};
+class C : public A, public B {
+};
+int main() {
+    C obj;
+    obj.A::show();
+    obj.B::show();
+    return 0;
+}`},
+ {s:1,src:"Predicted",t:"Virtual function and destructor",c:`#include <iostream>
+using namespace std;
+class Base {
+public:
+    Base() { cout << "Base+ "; }
+    virtual ~Base() { cout << "Base- "; }
+};
+class Derived : public Base {
+public:
+    Derived() { cout << "Derived+ "; }
+    ~Derived() { cout << "Derived- "; }
+};
+int main() {
+    Base *p = new Derived();
+    delete p;
+    return 0;
+}`}
+ ],
+ theory:[
+ {m:2,q:"How does encapsulation ensure data security in object-oriented programming? Should all attributes be public and methods private to achieve encapsulation? Justify your response."},
+ {m:3,q:"Consider the following function declaration. Explain the issue with it and describe different ways it can be corrected.",c:"void example(int x, int y = 5, int z);"},
+ {m:2,q:"Justify, with respect to object-oriented principles and class design in C++, why a static member function can only access static data members and not non-static data members."},
+ {m:3,q:"Can a constructor in C++ have a parameter with the same name as a member variable? What issues might arise in such a case, and how can they be resolved? Explain with suitable code."},
+ {m:2,q:"Explain the scenarios where passing an object by value is more beneficial than passing it by reference, and vice versa."},
+ {m:3,q:"Consider two classes, A and B. Class A has a private data member x, and class B has a private data member y. Class A declares class B as a friend class, and class B declares a non-member function print() as a friend function. Can print() directly access and display the private members x and y? Justify your answer, and if it cannot, provide a solution to make it possible for print() to display both x and y."},
+ {m:2,q:"Can a constructor be explicitly invoked like a regular member function in C++? Justify your answer with an example."},
+ {m:3,q:"Explain the difference between a default constructor and a constructor with default parameters. Under what scenarios would you use each, and what are the limitations of a default constructor in terms of object initialization?"},
+ {m:2,q:"In a multiple inheritance scenario, if two base classes have a function with the same signature, will there be any problem when calling that function from a derived class? If not, explain why. If yes, how can such conflicts be resolved explicitly in C++?"},
+ {m:3,q:"A class Animal has a pure virtual function and a constructor, and a derived class Dog inherits from Animal and implements the pure virtual function. Explain the sequence of constructor calls when an object of class Dog is created. Can the constructor of the base class Animal be called explicitly from outside the derived class Dog? Justify your answer."},
+ {m:2,q:"In C++, how can you handle multiple exceptions of different types using catch blocks? Provide an example demonstrating this."},
+ {m:3,q:"What is a function template with a parameter in C++? Provide a code snippet demonstrating a template function that finds the maximum of two numbers of different types (e.g., int, float, double)."},
+ {m:4,q:"In C++, what does the Standard Template Library (STL) refer to? Describe the function of containers within the STL and list at least three types of containers, providing examples for each."},
+ {m:2.5,q:"In a class hierarchy with multiple, hybrid and virtual inheritance, explain how constructor and destructor invocation order is determined. How does the presence of virtual bases alter the standard left-to-right, depth-first construction order?"},
+ {m:2.5,q:"Differentiate between shallow copy, deep copy, and move semantics in C++ in terms of resource ownership, object lifetime, and efficiency. Identify the scenarios where each approach is appropriate."},
+ {q:"In C++, static data members are stored separately from objects but are still controlled by the class. Explain how access specifiers (private, protected, public) apply to static members, and why private static members are sometimes used to implement global-like behaviour safely."},
+ {f:1,q:"In C++, a class with at least one virtual function is guaranteed to have its virtual table pointer (vptr) placed at the beginning of the object layout."},
+ {f:1,q:"If a template class has a static data member, each template instantiation gets its own separate copy of that static member."},
+ {f:1,q:"When an exception is thrown during stack unwinding, the program will always terminate immediately without running any remaining destructors."},
+ {f:1,q:"If a class overloads the comma operator, the overloaded version is used even in a for-loop’s increment expression."},
+ {f:1,q:"Deleting a base-class pointer that does not point to the first nonstatic data member of the object (due to pointer arithmetic) results in undefined behaviour even if the base class has a virtual destructor."}
+ ]
+},{
+ name:"COA",
+ tabs:["num","theory"],
+ nsections:["Previous-year questions","Additional practice questions"],
+ tsections:["December 2024","December 2025"],
+ num:[
+ {s:0,src:"Dec 2025 · Q1(a)",m:4,k:"Cache",t:"Two-level cache: average memory access time",q:"A computing system has two levels of cache (L1 and L2) and a main memory. The L1 cache access time is 1 ns and its hit rate is 90%. The L2 cache hit rate is 80% and the miss penalty for transferring data from L2 to L1 is 10 ns. The miss penalty for transferring data from main memory to L2 is 100 ns. Calculate the average memory access time in this system."},
+ {s:0,src:"Dec 2025 · Q1(b)",m:4,k:"Cache",t:"Block-set associative cache",q:"A block-set associative cache memory consists of 128 blocks divided into four block sets. The main memory consists of 16,384 blocks and each block contains 256 eight-bit words.",r:["How many bits are required for addressing the main memory?","How many bits are needed to represent the TAG, SET and WORD fields?"]},
+ {s:0,src:"Dec 2024 · Q6(a)",m:2,k:"Cache",t:"Two-level cache in clock cycles",q:"A processor has a two-level cache: L1 hit rate 90%, L2 hit rate 92%, L1 access time 2 clock cycles, L2 access time 10 clock cycles, main memory access time 100 clock cycles. Calculate the average memory access time (T_avg) in clock cycles."},
+ {s:0,src:"Dec 2024 · Q7(a)",m:3,k:"Cache",t:"Effect of miss penalty",q:"A computer system has cache hit rate 60%, cache access time 17 ns and initial cache miss penalty 50 ns. Scenario: suppose the cache miss penalty increases from 60 ns to 100 ns.",r:["Calculate the initial effective memory access time.","Calculate the new effective memory access time.","Explain how the increase in miss penalty affects the effective memory access time."]},
+ {s:0,src:"Dec 2025 · Q2(b)",m:4,k:"DMA",t:"Processor time consumed by disk DMA",q:"A hard disk is connected to a 150 MHz processor through a DMA controller. The initial setup of a DMA transfer takes 1000 clock cycles for the processor. The disk has a transfer rate of 8000 KBPS and the average block transferred is 8 KB. What fractional percentage of the processor time is consumed by the disk, if the disk is actively transferring 100% of the time?"},
+ {s:0,src:"Dec 2024 · Q2",m:5,k:"Pipeline",t:"Five-stage pipeline timing",q:"A pipeline consists of 5 stages with durations of 40 ns, 60 ns, 70 ns, 50 ns and 80 ns. The latch delay between stages is 5 ns. Calculate:",r:["The pipeline cycle time.","The total execution time for 500 tasks in a non-pipelined system.","The speedup ratio achieved by pipelining.","The total execution time for 500 tasks in the pipelined system.","The throughput of the pipelined system in tasks per second."]},
+ {s:0,src:"Dec 2024 · Q3(a)",k:"Pipeline",t:"Dependencies, hazards and NOPs",q:"The following instructions are executed in the basic 5-stage pipelined processor.",c:"OR R1, R2, R3\nOR R2, R1, R4\nOR R1, R1, R2",r:["Indicate dependencies and their types.","Assume no forwarding. Indicate hazards and add NOP instructions to eliminate them.","Assume full forwarding. Indicate hazards and add NOP instructions to eliminate them."]},
+ {s:0,src:"Dec 2025 · Q4(a)",m:5,k:"Pipeline",t:"Pipeline with a taken branch",q:"An instruction pipeline has five stages without branch prediction: FI, DI, FO, EI and WO with delays of 5, 7, 10, 8 and 6 ns. There are buffers after each stage, each with a delay of 1 ns. A program of 12 instructions I1 to I12 is executed. I4 is the only branch instruction and its target is I9. If the branch is taken, calculate the time needed to complete the program."},
+ {s:0,src:"Dec 2025 · Q3(b)",m:4,k:"Control unit",t:"Hardwired control signal expressions",q:"A hardwired CPU uses 10 control signals S1 to S10 in time steps T1 to T5 to implement four instructions I1 to I4 as shown. Find the expressions for the circuits that generate S1, S3, S5 and S10.",c:"     T1        T2         T3        T4      T5\nI1   S1,S3,S5  S2,S4,S6   S1,S7     S10     S3,S8\nI2   S1,S3,S5  S8,S9,S10  S5,S6,S7  S6      S10\nI3   S1,S3,S5  S7,S8,S10  S2,S6,S9  S10     S1,S3\nI4   S1,S2,S5  S2,S6,S7   S5,S10    S6,S9   S10"},
+ {s:0,src:"Dec 2025 · Q5(a)",m:4,k:"Basic computer",t:"Instruction cycle in the basic computer",q:"The content of PC in the basic computer is 3AF (all numbers in hexadecimal). AC = 7EC3. Memory at 3AF = 932E, at 32E = 09AC, at 9AC = 8B9F.",r:["What instruction will be fetched and executed next?","Show the binary operation performed in the AC when the instruction is executed.","Give the contents of PC, AR, DR, AC and IR in hexadecimal and the values of E, I and SC in binary at the end of the instruction cycle."]},
+ {s:0,src:"Dec 2025 · Q5(b)",m:4,k:"Addressing",t:"Effective address and operand",q:"The first instruction in memory is Load to AC and its address field is 500. Find the effective address and operand value for register indirect, relative, index and direct addressing modes (1 mark each).",c:"Registers: PC = 200, R1 = 400, IR = 100\n\nAddress  Memory\n200      Load to AC (Mode)\n201      Address = 500\n202      Next Instruction\n399      450\n400      700\n500      800\n600      900\n702      325\n800      300\n900      320"},
+ {s:1,src:"Predicted",m:4,k:"Cache",t:"AMAT calculation",q:"A cache has an access time of 4 ns and a hit ratio of 90%. The miss penalty is 40 ns. Calculate:",r:["Miss ratio.","Average memory access time."]},
+ {s:1,src:"Predicted",m:5,k:"Cache",t:"Two-level cache",q:"L1 hit rate 90%, L2 local hit rate 80%, L1 access time 2 ns, L2 access time 10 ns, main memory access time 100 ns. Calculate the average memory access time, assuming L2 is accessed only when L1 misses."},
+ {s:1,src:"Predicted",m:4,k:"Cache",t:"Direct mapping",q:"A direct-mapped cache contains 64 lines. Main memory contains 4096 blocks, and each block contains 16 words. Calculate:",r:["Main memory address bits.","Number of index bits.","Number of word bits.","Number of tag bits."]},
+ {s:1,src:"Predicted",m:4,k:"Cache",t:"Set-associative mapping",q:"A cache contains 256 blocks arranged in 4-way set-associative mapping. Main memory contains 16,384 blocks with 32 words per block. Calculate:",r:["Number of cache sets.","Number of SET bits.","Number of WORD bits.","Number of TAG bits."]},
+ {s:1,src:"Predicted",m:4,k:"Cache",t:"Cache performance",q:"A system has a cache access time of 5 ns, a miss penalty of 60 ns and a hit ratio of 95%. Calculate:",r:["AMAT.","New AMAT if the hit ratio decreases to 80%.","Difference between the two access times."]},
+ {s:1,src:"Predicted",m:4,k:"DMA",t:"Processor overhead",q:"A processor operates at 200 MHz. The initial DMA setup takes 2000 clock cycles. A disk transfers data at 10 MB/s in blocks of 4 KB. Calculate the percentage of processor time consumed by DMA setup, assuming continuous data transfer."},
+ {s:1,src:"Predicted",m:3,k:"DMA",t:"DMA transfer time",q:"A DMA controller transfers 64 KB of data at a rate of 8 MB/s. Calculate the total transfer time."},
+ {s:1,src:"Predicted",m:4,k:"DMA",t:"DMA processor utilization",q:"A processor runs at 100 MHz. Each DMA transfer requires 500 processor cycles for setup. If 200 blocks are transferred every second, calculate:",r:["Total processor cycles consumed per second.","Percentage of processor time consumed."]},
+ {s:1,src:"Predicted",m:3,k:"Pipeline",t:"Pipeline cycle time",q:"A four-stage pipeline has stage delays of 20 ns, 30 ns, 40 ns and 25 ns. The latch delay is 5 ns. Calculate the pipeline cycle time."},
+ {s:1,src:"Predicted",m:4,k:"Pipeline",t:"Pipeline execution time",q:"A five-stage pipeline executes 100 instructions. The clock cycle time is 10 ns. Assume no stalls or hazards. Calculate:",r:["Total pipeline clock cycles.","Total execution time.","Throughput in instructions per second."]},
+ {s:1,src:"Predicted",m:4,k:"Pipeline",t:"Speedup",q:"A non-pipelined processor requires 150 ns to execute one instruction. A pipelined processor has a clock cycle time of 50 ns and five stages. Calculate the speedup for 100 instructions, assuming ideal pipeline execution."},
+ {s:1,src:"Predicted",m:4,k:"Pipeline",t:"Pipeline branch penalty",q:"A five-stage pipeline executes 20 instructions with a clock cycle time of 10 ns. Two branch instructions are taken, each causing a penalty of two clock cycles. Calculate the total execution time, assuming no other stalls."},
+ {s:1,src:"Predicted",m:5,k:"Pipeline",t:"Pipeline dependencies",q:"Consider the following instructions. Identify:",c:"ADD R1, R2, R3\nSUB R4, R1, R5\nMUL R6, R4, R1\nADD R7, R6, R2",r:["All data dependencies.","The dependency type.","The hazards that may occur.","How forwarding can resolve the hazards."]},
+ {s:1,src:"Predicted",m:4,k:"Control unit",t:"Boolean expression derivation",q:"A control unit has four instructions I1 to I4 and three timing steps T1 to T3. Signal S1 is activated as follows: I1 at T1 and T2; I2 at T1 and T3; I3 at T2; I4 at T1 and T2. Derive the Boolean expression for S1."},
+ {s:1,src:"Predicted",m:4,k:"Control unit",t:"Control signal generation",q:"Given the following table, derive the Boolean expressions for S1, S2 and S3.",c:"     T1      T2      T3\nI1   S1,S2   S2,S3   S1\nI2   S1,S3   S1,S2   S2\nI3   S2,S3   S1      S1,S3\nI4   S1      S2,S3   S1,S2"},
+ {s:1,src:"Predicted",m:4,k:"Basic computer",t:"Instruction execution",q:"A basic computer has PC = 300, AC = 5000, M[300] = 0120 and M[120] = 00F0. Assuming the instruction at address 300 is a direct AND instruction, calculate:",r:["The instruction opcode and address field.","The operand fetched.","The final content of AC."]},
+ {s:1,src:"Predicted",m:5,k:"Addressing",t:"Addressing modes",q:"Given PC = 100, R1 = 200 and address field = 300, calculate the effective address and operand for the modes below. Assume PC points to the next instruction when calculating relative addressing.",c:"Address  Value\n200      400\n300      500\n400      600\n500      700\n600      800",r:["Direct addressing.","Register indirect addressing.","Indexed addressing using R1.","Relative addressing."]}
+ ],
+ theory:[
+ {s:0,src:"Q1",m:5,q:"Differentiate between a processor register and a memory register, highlighting their roles and functionalities in a computer system. Provide an example to illustrate the difference."},
+ {s:0,src:"Q3(b)",q:"Explain the different components of control unit and show with the help of a diagram."},
+ {s:0,src:"Q6(b)",q:"Compare the microprogrammed and hardwired control unit designs in terms of speed, flexibility, and complexity. Why is one preferred over the other in certain applications?"},
+ {s:0,src:"Q4",m:5,q:"What is a mapping function? What are the ways the cache can be mapped? Explain each mapping technique with an example."},
+ {s:0,src:"Q5(a)",q:"Explain memory hierarchy in a computer system with a suitable diagram. Also, highlight the roles of each level such as registers, cache, main memory and secondary storage."},
+ {s:0,src:"Q5(b)",q:"What is an interrupt and its types? Also, explain the different functions of the standard I/O interface."},
+ {s:0,src:"Q7(b)",q:"What is a superscalar processor, and how does it differ from a scalar processor in terms of instruction execution?"},
+ {s:0,src:"Q8",m:5,q:"Explain pipeline in computer organization and explain different types of hazards with diagram. Explain how conflict resolution is carried out."},
+ {s:0,src:"Q9",q:"Write a short note with a suitable example (2 marks each): (i) Loop Buffer, (ii) Code Converter, (iii) Memory Interleaving, (iv) Virtual Memory, (v) Redundant Array of Independent Disks (RAID)."},
+ {s:1,src:"Q2(a)",m:5,q:"Explain the working of a DMA controller with the help of a block diagram. How does DMA reduce CPU involvement during I/O transfer? Also differentiate between Cycle Stealing and Burst Mode of DMA."},
+ {s:1,src:"Q3(a)",m:4,q:"Explain Delay Element and Sequence Counter Methods used in the hardwired control unit in detail with a suitable diagram. Also justify which method is better."},
+ {s:1,src:"Q4(b)",m:5,q:"Explain different types of mapping techniques in cache memory in detail. Use suitable diagrams and examples."},
+ {s:1,src:"Q6(a)",m:4,q:"Explain what an interrupt is. Describe the process of interrupt-driven input/output."},
+ {s:1,src:"Q6(b)",q:"Write short notes on the following (1.5 marks each): (i) Virtual Memory, (ii) Differentiate RISC and CISC."}
+ ]
+}];
+
+const TABS = {code:"Code",theory:"Theory",output:"Output",num:"Numericals",notes:"Notes"};
+let cur = 0, kind = null;
+function buildSeg(){
+  const t = BANK[cur].tabs || ["code","theory","output","notes"];
+  if(!t.includes(kind)) kind = t[0];
+  $("seg").innerHTML = t.map(k=>`<button data-k="${k}" aria-pressed="${k===kind}">${TABS[k]}</button>`).join("");
+}
+const $ = id => document.getElementById(id);
+const fmt = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/`([^`]+)`/g, "<code>$1</code>");
+
+function buildNav(){
+  $("nav").innerHTML = BANK.map((s,i)=>
+    `<button data-i="${i}" aria-current="${i===cur}">${s.name}<span>${(s.code||[]).length + s.theory.length + (s.output||[]).length + (s.num||[]).length}</span></button>`).join("");
+}
+function row(n, body){ return `<article class="q"><div class="qh"><div class="n">${n}.</div><div class="qt">${body}</div></div></article>`; }
+function render(){
+  const s = BANK[cur];
+  $("title").textContent = s.name;
+  $("sub").textContent = kind==="notes" ? s.notes.length + " quick-reference notes on file handling" : (s[kind]||[]).length + " " + ({code:"coding",theory:"theory",output:"output-prediction",num:"numerical"}[kind]) + " questions";
+  let h = "", last = -1;
+  if(kind==="code"){
+    s.code.forEach((x,i)=>{
+      if(x.s!==last){ last=x.s; h += `<h2>${s.sections[x.s]}</h2>`; }
+      h += row(i+1, `<p class="ttl">${fmt(x.t)}</p><p><span class="tag">${x.m} marks</span></p>` +
+        (x.i?`<p>${fmt(x.i)}</p>`:"") + `<ol>${x.r.map(r=>`<li>${fmt(r)}</li>`).join("")}</ol>`);
+    });
+  } else if(kind==="notes"){
+    s.notes.forEach(x=>{
+      h += `<h2>${fmt(x.t)}</h2>` + (x.p?`<p>${fmt(x.p)}</p>`:"") + (x.rows?`<div class="tw"><table><tr>${x.rows[0].map(c=>`<th>${fmt(c)}</th>`).join("")}</tr>${x.rows.slice(1).map(r=>`<tr>${r.map(c=>`<td>${fmt(c)}</td>`).join("")}</tr>`).join("")}</table></div>`:"") + (x.c?`<pre>${fmt(x.c)}</pre>`:"") + (x.n?`<p>${fmt(x.n)}</p>`:"");
+    });
+  } else if(kind==="num"){
+    s.num.forEach((x,i)=>{
+      if(x.s!==last){ last=x.s; h += `<h2>${s.nsections[x.s]}</h2>`; }
+      h += row(i+1, `<p class="ttl">${fmt(x.t)}</p><p><span class="tag${x.src==="Predicted"?"":" f"}">${x.src}</span><span class="tag">${x.k}</span>${x.m?`<span class="tag">${x.m} marks</span>`:""}</p><p>${fmt(x.q)}</p>` + (x.c?`<pre>${fmt(x.c)}</pre>`:"") + (x.r?`<ol type="i">${x.r.map(r=>`<li>${fmt(r)}</li>`).join("")}</ol>`:""));
+    });
+  } else if(kind==="output"){
+    s.output.forEach((x,i)=>{
+      if(x.s!==last){ last=x.s; h += `<h2>${s.osections[x.s]}</h2>`; }
+      h += row(i+1, `<p class="ttl">${fmt(x.t)}</p><p><span class="tag${x.src==="Predicted"?"":" f"}">${x.src}</span></p>` + (x.n?`<p>${fmt(x.n)}</p>`:"") + `<pre>${fmt(x.c.trim())}</pre>`);
+    });
+  } else {
+    s.theory.forEach((x,i)=>{
+      if(x.s!==undefined && x.s!==last){ last=x.s; h += `<h2>${s.tsections[x.s]}</h2>`; }
+      if(x.f && !s.theory[i-1].f) h += `<p class="note">Questions ${i+1}–${s.theory.length}: decide whether each statement is true or false, and justify your answer.</p>`;
+      const tags = (x.src?`<span class="tag">${x.src}</span>`:"") + (x.m?`<span class="tag">${x.m} marks</span>`:"") + (x.f?`<span class="tag f">True or false</span>`:"");
+      h += row(i+1, `<p>${fmt(x.q)}</p>` + (x.c?`<pre>${fmt(x.c)}</pre>`:"") + (tags?`<p>${tags}</p>`:""));
+    });
+  }
+  $("list").innerHTML = h;
+}
+function select(i){
+  cur = i; kind = null; buildNav(); buildSeg(); render(); $("main").scrollTop = 0;
+  document.body.classList.remove("nav");
+}
+$("nav").addEventListener("click", e=>{ const b=e.target.closest("button"); if(b) select(+b.dataset.i); });
+document.querySelector(".seg").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  kind=b.dataset.k;
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  render(); $("main").scrollTop = 0;
+});
+$("menu").addEventListener("click", ()=>document.body.classList.add("nav"));
+$("scrim").addEventListener("click", ()=>document.body.classList.remove("nav"));
+buildNav(); buildSeg(); render();
+</script>
+</body>
+</html>
