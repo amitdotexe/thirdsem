@@ -64,6 +64,12 @@ td:first-child{font-weight:700;white-space:nowrap}
  .wrap{padding:20px 18px 80px}
 }
 @media(prefers-reduced-motion:reduce){aside{transition:none}}
+.tk{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.tk input{appearance:none;-webkit-appearance:none;flex:none;width:22px;height:22px;margin:2px 0 0;border:2px solid var(--black);border-radius:5px;background:transparent;cursor:pointer;display:grid;place-content:center}
+.tk input:checked{background:var(--black)}
+.tk input:checked::after{content:"";width:6px;height:11px;border:solid var(--cream);border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.tk.done .tx{opacity:.5;text-decoration:line-through}
+h2 .cnt{float:right;font-size:14px;font-weight:400;opacity:.7}
 </style>
 </head>
 <body>
@@ -704,10 +710,50 @@ int main() {
  {s:1,src:"Q6(a)",m:4,q:"Explain what an interrupt is. Describe the process of interrupt-driven input/output."},
  {s:1,src:"Q6(b)",q:"Write short notes on the following (1.5 marks each): (i) Virtual Memory, (ii) Differentiate RISC and CISC."}
  ]
+},{
+ name:"DSA",
+ tabs:["topics"],
+ chapters:[
+ {name:"Chapter 1: BST",items:[
+  "Inorder, preorder, postorder traversal (recursive and non-recursive using stack)",
+  "Level order traversal",
+  "Height of a tree",
+  "BST operations: search, min, max, predecessor, successor, insert, delete",
+  "Retrieval in sorted order (inorder traversal)",
+  "Sorting using BST"]},
+ {name:"Chapter 2: AVL Tree",items:[
+  "Balance factor and rotations (LL, RR, LR, RL)",
+  "AVL insert",
+  "AVL delete"]},
+ {name:"Chapter 3: Threaded Binary Tree",items:[
+  "Threaded tree traversal"]},
+ {name:"Chapter 4: Heap",items:[
+  "Percolate down",
+  "Percolate up"]},
+ {name:"Chapter 5: Graph",items:[
+  "Insert vertex and edge",
+  "Graph coloring",
+  "BFS (recursive and non-recursive)",
+  "DFS (iterative)",
+  "Kruskal's algorithm",
+  "Prim's algorithm",
+  "Dijkstra's algorithm",
+  "Kahn's algorithm",
+  "Bellman-Ford algorithm",
+  "Floyd-Warshall algorithm"]}
+ ]
 }];
 
-const TABS = {code:"Code",theory:"Theory",output:"Output",num:"Numericals",notes:"Notes",qb1:"Question Bank 1"};
+const TABS = {code:"Code",theory:"Theory",output:"Output",num:"Numericals",notes:"Notes",qb1:"Question Bank 1",topics:"Topics"};
 let cur = 0, kind = null;
+let DONE = {};
+try{ DONE = JSON.parse(localStorage.getItem("qb-done")||"{}"); }catch(e){}
+function saveDone(){ try{ localStorage.setItem("qb-done", JSON.stringify(DONE)); }catch(e){} }
+function topicSub(s){
+  const all = s.chapters.reduce((a,c)=>a+c.items.length,0);
+  const d = s.chapters.reduce((a,c)=>a+c.items.filter(t=>DONE[s.name+"|"+t]).length,0);
+  return all+" topics · "+d+" done";
+}
 function buildSeg(){
   const t = BANK[cur].tabs || ["code","theory","output","notes","qb1"];
   if(!t.includes(kind)) kind = t[0];
@@ -718,13 +764,13 @@ const fmt = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c
 
 function buildNav(){
   $("nav").innerHTML = BANK.map((s,i)=>
-    `<button data-i="${i}" aria-current="${i===cur}">${s.name}<span>${(s.code||[]).length + s.theory.length + (s.output||[]).length + (s.num||[]).length + (s.qb1||[]).length}</span></button>`).join("");
+    `<button data-i="${i}" aria-current="${i===cur}">${s.name}<span>${(s.code||[]).length + (s.theory||[]).length + (s.output||[]).length + (s.num||[]).length + (s.qb1||[]).length + (s.chapters||[]).reduce((a,c)=>a+c.items.length,0)}</span></button>`).join("");
 }
 function row(n, body){ return `<article class="q"><div class="qh"><div class="n">${n}.</div><div class="qt">${body}</div></div></article>`; }
 function render(){
   const s = BANK[cur];
   $("title").textContent = s.name;
-  $("sub").textContent = kind==="qb1" ? "10 long-answer questions (theory + scenario) and 5 output-prediction questions" : kind==="notes" ? s.notes.length + " quick-reference notes on file handling" : (s[kind]||[]).length + " " + ({code:"coding",theory:"theory",output:"output-prediction",num:"numerical"}[kind]) + " questions";
+  $("sub").textContent = kind==="topics" ? topicSub(s) : kind==="qb1" ? "10 long-answer questions (theory + scenario) and 5 output-prediction questions" : kind==="notes" ? s.notes.length + " quick-reference notes on file handling" : (s[kind]||[]).length + " " + ({code:"coding",theory:"theory",output:"output-prediction",num:"numerical"}[kind]) + " questions";
   let h = "", last = -1;
   if(kind==="code"){
     s.code.forEach((x,i)=>{
@@ -742,6 +788,15 @@ function render(){
         (x.g||[{r:x.r}]).forEach(g=>{ b += (g.h?`<p><strong>${fmt(g.h)}</strong></p>`:"") + (g.i?`<p>${fmt(g.i)}</p>`:"") + (g.r?`<ul>${g.r.map(r=>`<li>${fmt(r)}</li>`).join("")}</ul>`:""); });
       }
       h += row(i+1, b);
+    });
+  } else if(kind==="topics"){
+    s.chapters.forEach((c,ci)=>{
+      const d = c.items.filter(t=>DONE[s.name+"|"+t]).length;
+      h += `<h2>${fmt(c.name)}<span class="cnt" id="cnt${ci}">${d}/${c.items.length}</span></h2>`;
+      c.items.forEach(t=>{
+        const k = s.name+"|"+t, on = !!DONE[k];
+        h += `<label class="tk${on?" done":""}"><input type="checkbox" data-k="${k}" data-c="${ci}"${on?" checked":""}><span class="tx">${fmt(t)}</span></label>`;
+      });
     });
   } else if(kind==="notes"){
     s.notes.forEach(x=>{
@@ -781,6 +836,15 @@ document.querySelector(".seg").addEventListener("click", e=>{
 const wide = () => matchMedia("(min-width:821px)").matches;
 $("menu").addEventListener("click", ()=>{ if(wide()) document.body.classList.toggle("collapsed"); else document.body.classList.toggle("nav"); });
 
+$("list").addEventListener("change", e=>{
+  const b = e.target.closest("input[data-k]"); if(!b) return;
+  if(b.checked) DONE[b.dataset.k] = 1; else delete DONE[b.dataset.k];
+  saveDone();
+  b.closest(".tk").classList.toggle("done", b.checked);
+  const ci = b.dataset.c, boxes = [...$("list").querySelectorAll('input[data-c="'+ci+'"]')];
+  $("cnt"+ci).textContent = boxes.filter(x=>x.checked).length+"/"+boxes.length;
+  $("sub").textContent = topicSub(BANK[cur]);
+});
 $("scrim").addEventListener("click", ()=>document.body.classList.remove("nav"));
 buildNav(); buildSeg(); render();
 </script>
